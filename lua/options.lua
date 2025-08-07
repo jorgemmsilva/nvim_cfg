@@ -18,3 +18,5 @@ vim.opt.scrolloff = 8 -- keep 8 lines, don't let the cursor hit the bottom of th
 vim.opt.clipboard = "" -- disables use of system clipboard
 
 vim.opt.wrap = false -- don't wrap lines
+
+vim.o.laststatus = 2 -- statusline show in every split

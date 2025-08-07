@@ -40,6 +40,7 @@ map("x", "<leader-p>", "_dP")
 -- map a decent keys to telescope stuff
 map("n", "<C-p>", "<cmd>Telescope find_files<CR>", { noremap = true, silent = true, desc = "telescope find files" })
 map("n", "<C-f>", "<cmd>Telescope live_grep<CR>", { noremap = true, silent = true, desc = "telescope live grep" })
+map("n", "<leader>fr", "<cmd>Telescope oldfiles<CR>", { desc = "Recent Files" })
 
 -- allow to move selected lines up/down
 map("v", "J", ":m '>+1<CR>gv=gv")
