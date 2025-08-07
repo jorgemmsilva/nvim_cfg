@@ -64,9 +64,6 @@ map(
   { desc = "replace all occurances current word" }
 )
 
--- map <Esc> to exit terminal mode
-map("t", "<Esc>", [[<C-\><C-n>]], { noremap = true })
-
 -- Navigate buffers with Ctrl + PageDown/PageUp
 map("n", "<C-PageDown>", ":bnext<CR>", { noremap = true, silent = true, desc = "Next buffer" })
 map("n", "<C-PageUp>", ":bprevious<CR>", { noremap = true, silent = true, desc = "Previous buffer" })
@@ -82,3 +79,25 @@ end, { desc = "Toggle line wrap" })
 --- navigation with arrow keys
 map("i", "<C-h>", "<ESC>^i", { desc = "move beginning of line" })
 map("i", "<C-l>", "<End>", { desc = "move end of line" })
+
+-- toggle terminal
+map({ "n", "t" }, "<C-`>", function()
+  require("nvchad.term").toggle { pos = "sp", id = "htoggleTerm" }
+end, { desc = "terminal toggle horizonal term" })
+
+-- map <Esc> to exit terminal mode
+map("t", "<Esc>", [[<C-\><C-n>]], { noremap = true })
+
+-- rust Test mappings
+map("n", "<leader>tt", function()
+  require("neotest").run.run()
+end, { desc = "Run nearest test" })
+map("n", "<leader>tf", function()
+  require("neotest").run.run(vim.fn.expand "%")
+end, { desc = "Run file tests" })
+map("n", "<leader>ts", function()
+  require("neotest").summary.toggle()
+end, { desc = "Test summary" })
+map("n", "<leader>to", function()
+  require("neotest").output.open { enter = true }
+end, { desc = "Test output" })

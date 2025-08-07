@@ -35,29 +35,62 @@ return {
   },
 
   {
-    "neovim/nvim-lspconfig",
-    event = "User FilePost",
-    config = function()
-      require("nvchad.configs.lspconfig").defaults()
+    "mrcjkb/rustaceanvim",
+    version = "^6",
+    lazy = false,
+    ft = { "rust" },
+    init = function()
+      vim.g.rustaceanvim = {
+        -- Disable if you have issues
+        tools = {
+          hover_actions = {
+            auto_focus = false,
+          },
+        },
+        server = {
+          -- cmd = { vim.fn.stdpath "data" .. "/Users/jorge/.cargo/bin/rust-analyzer" },
+
+          default_settings = {
+            ["rust-analyzer"] = {
+              cargo = {
+                allFeatures = true,
+                buildScripts = {
+                  enable = true,
+                },
+              },
+              checkOnSave = true,
+              check = {
+                command = "clippy",
+              },
+              procMacro = {
+                enable = true,
+              },
+              test = {
+                extraArgs = { "--", "--color=always" },
+              },
+            },
+          },
+        },
+      }
     end,
   },
 
   {
-    "mrcjkb/rustaceanvim",
-    version = "^6",
-    lazy = false, -- plugin is already lazy
-    ["rust-analyzer"] = {
-      cargo = { allFeatures = true },
-      checkOnSave = {
-        command = "clippy",
-      },
+    "nvim-neotest/neotest",
+    dependencies = {
+      "nvim-neotest/nvim-nio",
+      "nvim-lua/plenary.nvim",
+      "antoinemadec/FixCursorHold.nvim",
+      "nvim-treesitter/nvim-treesitter",
+      -- "rouge8/neotest-rust",
     },
-    -- ft = { "rust" },
-    -- config = function(_,_)
-    --   vim.g.rustaceanvim = {
-    --     server = { on_attach = on_attach }
-    --   }
-    -- end
+    config = function()
+      require("neotest").setup {
+        adapters = {
+          require "rustaceanvim.neotest",
+        },
+      }
+    end,
   },
 
   {
