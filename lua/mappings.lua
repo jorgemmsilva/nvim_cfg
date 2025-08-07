@@ -98,15 +98,22 @@ map("t", "<Esc>", [[<C-\><C-n>]], { noremap = true })
 map("n", "<leader>tt", function()
   require("neotest").run.run()
 end, { desc = "Run nearest test" })
+
 map("n", "<leader>tf", function()
   require("neotest").run.run(vim.fn.expand "%")
 end, { desc = "Run file tests" })
+
 map("n", "<leader>ts", function()
   require("neotest").summary.toggle()
 end, { desc = "Test summary" })
+
 map("n", "<leader>to", function()
   require("neotest").output.open { enter = true }
 end, { desc = "Test output" })
+
+map("n", "<leader>td", function()
+  require("neotest").run.run { strategy = "dap" }
+end, { desc = "Debug nearest test" })
 
 --- code actions
 map("n", "<C-.>", function()
