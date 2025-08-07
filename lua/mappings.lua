@@ -19,9 +19,16 @@ local map = vim.keymap.set
 map("i", "jk", "<ESC>")
 -- map({ "n", "i", "v" }, "<C-s>", "<cmd> w <cr>")
 
--- keep cursor in the middle of the screen when paging up/down
-map("n", "<C-d>", "<C-d>zz")
+-- keep cursor in the middle of the screen when scrolling
 map("n", "<C-u>", "<C-u>zz")
+-- prevent overscrolling at the bottom
+vim.keymap.set("n", "<C-d>", function()
+  local last_line = vim.fn.line "$"
+  local bottom_visible = vim.fn.line "w$"
+  if bottom_visible < last_line then
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-d>zz", true, false, true), "n", true)
+  end
+end, { noremap = true, silent = true, desc = "Smart <C-d>" })
 
 -- keeps the cursor in the middle of the screen when searching
 map("n", "n", "nzzzv")
@@ -50,9 +57,28 @@ map("n", "<leader>Y", '"+Y', { desc = "copy to system clipboard" })
 -- map("n", "<leader>j", "<cmd>cprev<CR>zz")
 
 -- replace occurances of the current word
-vim.keymap.set(
+map(
   "n",
   "<leader>s",
   [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
   { desc = "replace all occurances current word" }
 )
+
+-- map <Esc> to exit terminal mode
+map("t", "<Esc>", [[<C-\><C-n>]], { noremap = true })
+
+-- Navigate buffers with Ctrl + PageDown/PageUp
+map("n", "<C-PageDown>", ":bnext<CR>", { noremap = true, silent = true, desc = "Next buffer" })
+map("n", "<C-PageUp>", ":bprevious<CR>", { noremap = true, silent = true, desc = "Previous buffer" })
+
+-- map nerdtree to a more familiar shortcut
+map("n", "<C-b>", ":NvimTreeToggle<CR>", { noremap = true, silent = true, desc = "Toggle NERDTree" })
+
+-- toggle line wrap
+map("n", "<leader>z", function()
+  vim.opt.wrap = not vim.opt.wrap:get()
+end, { desc = "Toggle line wrap" })
+
+--- navigation with arrow keys
+map("i", "<C-h>", "<ESC>^i", { desc = "move beginning of line" })
+map("i", "<C-l>", "<End>", { desc = "move end of line" })

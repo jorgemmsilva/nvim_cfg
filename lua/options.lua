@@ -16,3 +16,5 @@ vim.opt.undofile = true
 vim.opt.scrolloff = 8 -- keep 8 lines, don't let the cursor hit the bottom of the page
 
 vim.opt.clipboard = "" -- disables use of system clipboard
+
+vim.opt.wrap = false -- don't wrap lines

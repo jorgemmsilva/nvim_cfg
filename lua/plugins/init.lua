@@ -25,10 +25,33 @@ return {
   -- 		},
   -- 	},
   -- },
+
+  {
+    "mason-org/mason.nvim",
+    cmd = { "Mason", "MasonInstall", "MasonUpdate" },
+    opts = {
+      PATH = "append",
+    },
+  },
+
+  {
+    "neovim/nvim-lspconfig",
+    event = "User FilePost",
+    config = function()
+      require("nvchad.configs.lspconfig").defaults()
+    end,
+  },
+
   {
     "mrcjkb/rustaceanvim",
     version = "^6",
     lazy = false, -- plugin is already lazy
+    ["rust-analyzer"] = {
+      cargo = { allFeatures = true },
+      checkOnSave = {
+        command = "clippy",
+      },
+    },
     -- ft = { "rust" },
     -- config = function(_,_)
     --   vim.g.rustaceanvim = {
