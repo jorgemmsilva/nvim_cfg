@@ -35,4 +35,5 @@ require "cmds"
 
 vim.schedule(function()
   require "mappings"
+  require "debugger_mappings"
 end)

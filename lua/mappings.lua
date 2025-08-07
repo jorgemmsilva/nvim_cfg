@@ -3,6 +3,7 @@ require "nvchad.mappings"
 -- add yours here
 
 local map = vim.keymap.set
+local bufnr = vim.api.nvim_get_current_buf()
 
 -- modes:
 -- n -- Normal mode -- Regular mode when you’re navigating around
@@ -51,11 +52,15 @@ map("n", "<leader>y", '"+y', { desc = "copy to system clipboard" })
 map("v", "<leader>y", '"+y', { desc = "copy to system clipboard" })
 -- map("n", "<leader>Y", '"+Y', { desc = "copy to system clipboard" })
 
--- navigate "quick-fix list" (commenting as I have no clue wtf that is lol)
--- map("n", "<C-k>", "<cmd>cnext<CR>zz")
--- map("n", "<C-j>", "<cmd>cprev<CR>zz")
--- map("n", "<leader>k", "<cmd>cnext<CR>zz")
--- map("n", "<leader>j", "<cmd>cprev<CR>zz")
+-- navigate "quick-fix list"
+map("n", "<C-k>", "<cmd>cnext<CR>zz")
+map("n", "<C-j>", "<cmd>cprev<CR>zz")
+map("n", "<leader>k", "<cmd>cnext<CR>zz")
+map("n", "<leader>j", "<cmd>cprev<CR>zz")
+
+-- ADD J/K for 2+lines to jumplist
+map("n", "j", [[v:count ? (v:count >= 3 ? "m'" . v:count : '') . 'j' : 'gj']], { noremap = true, expr = true })
+map("n", "k", [[v:count ? (v:count >= 3 ? "m'" . v:count : '') . 'k' : 'gk']], { noremap = true, expr = true })
 
 -- replace occurances of the current word
 map(
@@ -89,7 +94,7 @@ end, { desc = "terminal toggle horizonal term" })
 -- map <Esc> to exit terminal mode
 map("t", "<Esc>", [[<C-\><C-n>]], { noremap = true })
 
--- rust Test mappings
+-- Tests
 map("n", "<leader>tt", function()
   require("neotest").run.run()
 end, { desc = "Run nearest test" })
@@ -102,3 +107,18 @@ end, { desc = "Test summary" })
 map("n", "<leader>to", function()
   require("neotest").output.open { enter = true }
 end, { desc = "Test output" })
+
+--- code actions
+map("n", "<C-.>", function()
+  vim.cmd.RustLsp "codeAction"
+  -- or vim.lsp.buf.codeAction() if you don't want grouping.
+end, { silent = true, buffer = bufnr, desc = "show code actions" })
+
+-- vim.keymap.set(
+--   "n",
+--   "K", -- Override Neovim's built-in hover keymap with rustaceanvim's hover actions
+--   function()
+--     vim.cmd.RustLsp { "hover", "actions" }
+--   end,
+--   { silent = true, buffer = bufnr }
+-- )

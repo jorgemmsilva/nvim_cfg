@@ -60,7 +60,9 @@ return {
     "mrcjkb/rustaceanvim",
     version = "^6",
     lazy = false,
-    ft = { "rust" },
+    dependencies = {
+      "mason-org/mason.nvim",
+    },
     init = function()
       vim.g.rustaceanvim = {
         -- Disable if you have issues
@@ -90,9 +92,22 @@ return {
         },
       }
     end,
-    config = function()
-      -- TODO
-    end,
+    -- config = function()
+    --   local mason_registry = require "mason-registry"
+    --   local codelldb = mason_registry.get_package "codelldb"
+    --   local extension_path = codelldb:get_install_path() .. "/extension/"
+    --   local codelldb_path = extension_path .. "adapter/codelldb"
+    --   local liblldb_path = extension_path .. "lldb/lib/liblldb.dylib"
+    --   -- If you are on Linux, replace the line above with the line below:
+    --   -- local liblldb_path = extension_path .. "lldb/lib/liblldb.so"
+    --   local cfg = require "rustaceanvim.config"
+    --
+    --   vim.g.rustaceanvim = {
+    --     dap = {
+    --       adapter = cfg.get_codelldb_adapter(codelldb_path, liblldb_path),
+    --     },
+    --   }
+    -- end,
   },
 
   {
@@ -128,6 +143,10 @@ return {
       dap.listeners.before.event_exited.dapui_config = function()
         dapui.close()
       end
+      dap.adapters.codelldb = {
+        type = "executable",
+        command = "codelldb",
+      }
     end,
   },
 
