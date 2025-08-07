@@ -48,7 +48,7 @@ map("v", "K", ":m '<-2<CR>gv=gv")
 --use leader to copy to system clipboard
 map("n", "<leader>y", '"+y', { desc = "copy to system clipboard" })
 map("v", "<leader>y", '"+y', { desc = "copy to system clipboard" })
-map("n", "<leader>Y", '"+Y', { desc = "copy to system clipboard" })
+-- map("n", "<leader>Y", '"+Y', { desc = "copy to system clipboard" })
 
 -- navigate "quick-fix list" (commenting as I have no clue wtf that is lol)
 -- map("n", "<C-k>", "<cmd>cnext<CR>zz")

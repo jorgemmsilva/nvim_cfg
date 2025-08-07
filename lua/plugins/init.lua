@@ -5,7 +5,6 @@ return {
     opts = require "configs.conform",
   },
 
-  -- These are some examples, uncomment them if you want to see them work!
   {
     "neovim/nvim-lspconfig",
     config = function()
@@ -15,7 +14,6 @@ return {
 
   -- test new blink
   -- { import = "nvchad.blink.lazyspec" },
-
   -- {
   -- 	"nvim-treesitter/nvim-treesitter",
   -- 	opts = {
@@ -26,15 +24,39 @@ return {
   -- 	},
   -- },
 
+  --  {
+  --   "nvchad/ui",
+  --   lazy = false,
+  --   config = function()
+  --     require "nvchad"
+  --   end,
+  -- },
+
   {
     "mason-org/mason.nvim",
-    cmd = { "Mason", "MasonInstall", "MasonUpdate" },
+    cmd = { "Mason", "MasonInstall", "MasonUpdate", "MasonUninstall" },
     opts = {
       PATH = "append",
     },
   },
 
   {
+    "rmagatti/auto-session",
+    lazy = false,
+    ---enables autocomplete for opts
+    ---@module "auto-session"
+    -- ---@type AutoSession.Config
+    opts = {
+      suppressed_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
+      -- log_level = 'debug',
+    },
+  },
+
+  ------------------------------------------------------------------
+  --- RUST STUFF
+  ------------------------------------------------------------------
+  {
+    -- NOTE: must use rust-analyzer from rustup `rustup component add rust-analyzer`
     "mrcjkb/rustaceanvim",
     version = "^6",
     lazy = false,
@@ -48,8 +70,6 @@ return {
           },
         },
         server = {
-          -- cmd = { vim.fn.stdpath "data" .. "/Users/jorge/.cargo/bin/rust-analyzer" },
-
           default_settings = {
             ["rust-analyzer"] = {
               cargo = {
@@ -65,13 +85,13 @@ return {
               procMacro = {
                 enable = true,
               },
-              test = {
-                extraArgs = { "--", "--color=always" },
-              },
             },
           },
         },
       }
+    end,
+    config = function()
+      -- TODO
     end,
   },
 
@@ -82,7 +102,6 @@ return {
       "nvim-lua/plenary.nvim",
       "antoinemadec/FixCursorHold.nvim",
       "nvim-treesitter/nvim-treesitter",
-      -- "rouge8/neotest-rust",
     },
     config = function()
       require("neotest").setup {
@@ -94,15 +113,30 @@ return {
   },
 
   {
-    "rmagatti/auto-session",
-    lazy = false,
-    ---enables autocomplete for opts
-    ---@module "auto-session"
-    -- ---@type AutoSession.Config
-    opts = {
-      suppressed_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
-      -- log_level = 'debug',
-    },
+    "mfussenegger/nvim-dap",
+    config = function()
+      local dap, dapui = require "dap", require "dapui"
+      dap.listeners.before.attach.dapui_config = function()
+        dapui.open()
+      end
+      dap.listeners.before.launch.dapui_config = function()
+        dapui.open()
+      end
+      dap.listeners.before.event_terminated.dapui_config = function()
+        dapui.close()
+      end
+      dap.listeners.before.event_exited.dapui_config = function()
+        dapui.close()
+      end
+    end,
+  },
+
+  {
+    "rcarriga/nvim-dap-ui",
+    dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
+    config = function()
+      require("dapui").setup()
+    end,
   },
 
   {
@@ -111,7 +145,16 @@ return {
     laxy = false,
     ft = { "toml" },
     config = function()
-      require("crates").setup()
+      require("crates").setup {
+        completion = {
+          cmp = {
+            enabled = true,
+          },
+        },
+      }
+      require("cmp").setup.buffer {
+        sources = { { name = "crates" } },
+      }
     end,
   },
 }
