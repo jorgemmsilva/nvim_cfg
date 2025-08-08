@@ -8,10 +8,9 @@ local M = {}
 M.base46 = {
   theme = "bearded-arc",
 
-  -- hl_override = {
-  -- 	Comment = { italic = true },
-  -- 	["@comment"] = { italic = true },
-  -- },
+  hl_override = {
+    Search = { bg = "#ff6600", fg = "#ffffff" },
+  },
 }
 
 M.nvdash = { load_on_startup = true }

@@ -48,8 +48,22 @@ return {
       require("scrollbar.handlers.gitsigns").setup()
     end,
   },
+
   { "kevinhwang91/nvim-hlslens" },
+
   { "mbbill/undotree", lazy = false },
+
+  {
+    "levouh/tint.nvim",
+    event = "VeryLazy",
+    opts = {
+      tint = 0, -- Negative values darken inactive windows
+      saturation = 0.5, -- Slight desaturation
+    },
+    keys = {
+      { "<leader>ti", "<cmd>TintToggle<cr>", desc = "Toggle window tinting" },
+    },
+  },
 
   ------------------------------------------------------------------
   --- RUST STUFF

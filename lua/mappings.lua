@@ -48,15 +48,16 @@ map("v", "J", ":m '>+1<CR>gv=gv")
 map("v", "K", ":m '<-2<CR>gv=gv")
 
 --use leader to copy to system clipboard
-map("n", "<leader>y", '"+y', { desc = "copy to system clipboard" })
-map("v", "<leader>y", '"+y', { desc = "copy to system clipboard" })
--- map("n", "<leader>Y", '"+Y', { desc = "copy to system clipboard" })
+-- vim.opt.clipboard = "" -- disables use of system clipboard
+-- map("n", "<leader>y", '"+y', { desc = "copy to system clipboard" })
+-- map("v", "<leader>y", '"+y', { desc = "copy to system clipboard" })
 
 -- navigate "quick-fix list"
-map("n", "<C-k>", "<cmd>cnext<CR>zz")
-map("n", "<C-j>", "<cmd>cprev<CR>zz")
-map("n", "<leader>k", "<cmd>cnext<CR>zz")
-map("n", "<leader>j", "<cmd>cprev<CR>zz")
+map("n", "<leader>j", "<cmd>cnext<CR>zz")
+map("n", "<leader>k", "<cmd>cprev<CR>zz")
+map("n", "<F4>", "<cmd>cnext<CR>zz")
+map("n", "<S-F4>", "<cmd>cprev<CR>zz")
+map("n", "<F16>", "<cmd>cprev<CR>zz") -- workaround for S-F4 not working in rio terminal
 
 -- ADD J/K for 2+lines to jumplist
 map("n", "j", [[v:count ? (v:count >= 3 ? "m'" . v:count : '') . 'j' : 'gj']], { noremap = true, expr = true })
@@ -93,6 +94,16 @@ end, { desc = "terminal toggle horizonal term" })
 
 -- map <Esc> to exit terminal mode
 map("t", "<Esc>", [[<C-\><C-n>]], { noremap = true })
+
+-- use ESC to close floats
+map("n", "<esc>", function()
+  for _, win in ipairs(vim.api.nvim_list_wins()) do
+    if vim.api.nvim_win_get_config(win).relative == "win" then
+      vim.api.nvim_win_close(win, false)
+    end
+    vim.cmd.nohlsearch() -- also clear search highlight
+  end
+end)
 
 -- Tests
 map("n", "<leader>tt", function()
@@ -136,15 +147,6 @@ vim.keymap.set("n", "?", function()
   -- TODO this should fall back to regular LSP hover when not in a rust file
   vim.cmd.RustLsp { "hover", "actions" }
 end, { silent = true, buffer = bufnr })
-
--- use ESC to close floats
-map("n", "<esc>", function()
-  for _, win in ipairs(vim.api.nvim_list_wins()) do
-    if vim.api.nvim_win_get_config(win).relative == "win" then
-      vim.api.nvim_win_close(win, false)
-    end
-  end
-end)
 
 -- TODO:
 -- RustLsp renderDiagnostics

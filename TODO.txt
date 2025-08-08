@@ -7,7 +7,6 @@ https://github.com/leath-dub/snipe.nvim
 https://github.com/echasnovski/mini.nvim
 https://github.com/yetone/avante.nvim
 https://github.com/folke/trouble.nvim
-https://github.com/MeanderingProgrammer/render-markdown.nvim
 https://github.com/ThePrimeagen/harpoon
 https://github.com/jinh0/eyeliner.nvim
 https://github.com/unblevable/quick-scope
@@ -21,6 +20,7 @@ https://github.com/folke/flash.nvim
 https://github.com/stevearc/oil.nvim
 https://github.com/dandavison/delta
 https://github.com/folke/snacks.nvim
+https://github.com/dmtrKovalenko/fff.nvim
 
 
 figure out which GIT plugins are worth using
