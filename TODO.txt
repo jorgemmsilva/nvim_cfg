@@ -6,10 +6,6 @@ plugins to check out:
 https://github.com/echasnovski/mini.nvim
 https://github.com/yetone/avante.nvim
 https://github.com/ThePrimeagen/harpoon
-https://github.com/kylechui/nvim-surround
-https://github.com/Goose97/timber.nvim
-https://github.com/MagicDuck/grug-far.nvim
-https://github.com/dmmulroy/ts-error-translator.nvim
 https://github.com/ibhagwan/fzf-lua
 https://github.com/stevearc/oil.nvim
 https://github.com/dandavison/delta

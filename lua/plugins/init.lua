@@ -58,7 +58,7 @@ return {
     event = "VeryLazy",
     opts = {
       tint = 0, -- Negative values darken inactive windows
-      saturation = 0.5, -- Slight desaturation
+      saturation = 0.3, -- Slight desaturation
     },
     keys = {
       { "<leader>ti", "<cmd>TintToggle<cr>", desc = "Toggle window tinting" },
@@ -125,8 +125,33 @@ return {
     end,
   },
 
+  {
+    "Goose97/timber.nvim",
+    version = "*", -- Use for stability; omit to use `main` branch for the latest features
+    event = "VeryLazy",
+    config = function()
+      require("timber").setup {
+        -- Configuration here, or leave empty to use defaults
+      }
+    end,
+  },
+
+  {
+    "MagicDuck/grug-far.nvim",
+    -- Note (lazy loading): grug-far.lua defers all it's requires so it's lazy by default
+    -- additional lazy config to defer loading is not really needed...
+    init = function()
+      -- optional setup call to override plugin options
+      -- alternatively you can set options with vim.g.grug_far = { ... }
+      require("grug-far").setup {
+        -- options, see Configuration section below
+        -- there are no required options atm
+      }
+    end,
+  },
+
   ------------------------------------------------------------------
-  --- RUST STUFF
+  --- RUST
   ------------------------------------------------------------------
   {
     -- NOTE: must use rust-analyzer from rustup `rustup component add rust-analyzer`
@@ -233,4 +258,9 @@ return {
       }
     end,
   },
+
+  ------------------------------------------------------------------
+  --- TYPESCRIPT
+  ------------------------------------------------------------------
+  { "dmmulroy/ts-error-translator.nvim" },
 }

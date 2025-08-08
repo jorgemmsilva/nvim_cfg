@@ -48,28 +48,28 @@ map("v", "J", ":m '>+1<CR>gv=gv")
 map("v", "K", ":m '<-2<CR>gv=gv")
 
 --use leader to copy to system clipboard
--- vim.opt.clipboard = "" -- disables use of system clipboard
--- map("n", "<leader>y", '"+y', { desc = "copy to system clipboard" })
--- map("v", "<leader>y", '"+y', { desc = "copy to system clipboard" })
+vim.opt.clipboard = "" -- disables use of system clipboard
+map("n", "<leader>y", '"+y', { desc = "copy to system clipboard" })
+map("v", "<leader>y", '"+y', { desc = "copy to system clipboard" })
 
 -- navigate "quick-fix list"
-map("n", "<leader>j", "<cmd>cnext<CR>zz")
-map("n", "<leader>k", "<cmd>cprev<CR>zz")
-map("n", "<F4>", "<cmd>cnext<CR>zz")
-map("n", "<S-F4>", "<cmd>cprev<CR>zz")
-map("n", "<F16>", "<cmd>cprev<CR>zz") -- workaround for S-F4 not working in rio terminal
+map("n", "<leader>j", "<cmd>cnext<CR>zz", { desc = "Quick-fix list next" })
+map("n", "<leader>k", "<cmd>cprev<CR>zz", { desc = "Quick-fix list prev" })
+map("n", "<F4>", "<cmd>cnext<CR>zz", { desc = "Quick-fix list next" })
+map("n", "<S-F4>", "<cmd>cprev<CR>zz", { desc = "Quick-fix list next" })
+map("n", "<F16>", "<cmd>cprev<CR>zz", { desc = "Quick-fix list prev" }) -- workaround for S-F4 not working in rio terminal
 
 -- ADD J/K for 2+lines to jumplist
 map("n", "j", [[v:count ? (v:count >= 3 ? "m'" . v:count : '') . 'j' : 'gj']], { noremap = true, expr = true })
 map("n", "k", [[v:count ? (v:count >= 3 ? "m'" . v:count : '') . 'k' : 'gk']], { noremap = true, expr = true })
 
 -- replace occurances of the current word
-map(
-  "n",
-  "<leader>s",
-  [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
-  { desc = "replace all occurances current word" }
-)
+-- map(
+--   "n",
+--   "<leader>s",
+--   [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
+--   { desc = "replace all occurances current word" }
+-- )
 
 -- Navigate buffers with Ctrl + PageDown/PageUp
 map("n", "<C-PageDown>", ":bnext<CR>", { noremap = true, silent = true, desc = "Next buffer" })
