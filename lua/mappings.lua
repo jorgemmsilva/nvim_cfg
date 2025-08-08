@@ -151,3 +151,5 @@ end)
 -- vim.cmd.RustLsp('renderDiagnostic')
 -- RustLsp explainError
 -- vim.cmd.RustLsp('explainError')
+
+map("n", "<leader>u", "<cmd>UndotreeToggle<CR>")

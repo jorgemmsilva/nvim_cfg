@@ -3,7 +3,6 @@
 
 
 plugins to check out:
-https://github.com/mbbill/undotree
 https://github.com/leath-dub/snipe.nvim
 https://github.com/echasnovski/mini.nvim
 https://github.com/yetone/avante.nvim

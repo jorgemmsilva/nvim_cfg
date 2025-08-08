@@ -49,6 +49,7 @@ return {
     end,
   },
   { "kevinhwang91/nvim-hlslens" },
+  { "mbbill/undotree", lazy = false },
 
   ------------------------------------------------------------------
   --- RUST STUFF
