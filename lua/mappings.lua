@@ -116,16 +116,38 @@ map("n", "<leader>td", function()
 end, { desc = "Debug nearest test" })
 
 --- code actions
-map("n", "<C-.>", function()
-  vim.cmd.RustLsp "codeAction"
-  -- or vim.lsp.buf.codeAction() if you don't want grouping.
-end, { silent = true, buffer = bufnr, desc = "show code actions" })
+vim.keymap.set({ "n", "v" }, "<C-.>", function()
+  if vim.bo.filetype == "rust" then
+    vim.cmd.RustLsp "codeAction"
+    return
+  end
 
--- vim.keymap.set(
---   "n",
---   "K", -- Override Neovim's built-in hover keymap with rustaceanvim's hover actions
---   function()
---     vim.cmd.RustLsp { "hover", "actions" }
---   end,
---   { silent = true, buffer = bufnr }
--- )
+  local has_clients = next(vim.lsp.get_clients { bufnr = 0 }) ~= nil
+  if not has_clients then
+    vim.notify("No LSP client attached", vim.log.levels.WARN)
+    return
+  end
+
+  vim.lsp.buf.code_action()
+end, { silent = true, desc = "Show code actions" })
+
+-- hover with ?
+vim.keymap.set("n", "?", function()
+  -- TODO this should fall back to regular LSP hover when not in a rust file
+  vim.cmd.RustLsp { "hover", "actions" }
+end, { silent = true, buffer = bufnr })
+
+-- use ESC to close floats
+map("n", "<esc>", function()
+  for _, win in ipairs(vim.api.nvim_list_wins()) do
+    if vim.api.nvim_win_get_config(win).relative == "win" then
+      vim.api.nvim_win_close(win, false)
+    end
+  end
+end)
+
+-- TODO:
+-- RustLsp renderDiagnostics
+-- vim.cmd.RustLsp('renderDiagnostic')
+-- RustLsp explainError
+-- vim.cmd.RustLsp('explainError')

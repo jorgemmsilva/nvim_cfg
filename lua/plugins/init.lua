@@ -12,25 +12,9 @@ return {
     end,
   },
 
-  -- test new blink
-  -- { import = "nvchad.blink.lazyspec" },
-  -- {
-  -- 	"nvim-treesitter/nvim-treesitter",
-  -- 	opts = {
-  -- 		ensure_installed = {
-  -- 			"vim", "lua", "vimdoc",
-  --      "html", "css"
-  -- 		},
-  -- 	},
-  -- },
-
-  --  {
-  --   "nvchad/ui",
-  --   lazy = false,
-  --   config = function()
-  --     require "nvchad"
-  --   end,
-  -- },
+  ------------------------------------------------------------------
+  --- Custom stuff below
+  ------------------------------------------------------------------
 
   {
     "mason-org/mason.nvim",
@@ -51,6 +35,20 @@ return {
       -- log_level = 'debug',
     },
   },
+
+  {
+    "petertriho/nvim-scrollbar",
+    lazy = false,
+    config = function()
+      require("scrollbar").setup()
+      require("scrollbar.handlers.search").setup {
+        -- hlslens config overrides
+      }
+      require("gitsigns").setup()
+      require("scrollbar.handlers.gitsigns").setup()
+    end,
+  },
+  { "kevinhwang91/nvim-hlslens" },
 
   ------------------------------------------------------------------
   --- RUST STUFF

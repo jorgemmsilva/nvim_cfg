@@ -1,0 +1,33 @@
+- cycle through project wide search with F4, S-F4
+
+
+
+plugins to check out:
+https://github.com/mbbill/undotree
+https://github.com/leath-dub/snipe.nvim
+https://github.com/echasnovski/mini.nvim
+https://github.com/yetone/avante.nvim
+https://github.com/folke/trouble.nvim
+https://github.com/MeanderingProgrammer/render-markdown.nvim
+https://github.com/ThePrimeagen/harpoon
+https://github.com/jinh0/eyeliner.nvim
+https://github.com/unblevable/quick-scope
+https://github.com/kylechui/nvim-surround
+https://github.com/Goose97/timber.nvim-surround
+https://github.com/MagicDuck/grug-far.nvim
+https://github.com/dmmulroy/ts-error-translator.nvim
+https://github.com/petertriho/nvim-scrollbar
+https://github.com/ibhagwan/fzf-lua
+https://github.com/folke/flash.nvim
+https://github.com/stevearc/oil.nvim
+https://github.com/dandavison/delta
+https://github.com/folke/snacks.nvim
+
+
+figure out which GIT plugins are worth using
+
+https://github.com/tpope/vim-fugitive
+
+https://jj-vcs.github.io/jj/latest/
+https://github.com/kdheepak/lazygit.nvim
+https://github.com/rhysd/git-messenger.vim
