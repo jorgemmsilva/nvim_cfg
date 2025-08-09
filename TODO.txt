@@ -1,10 +1,8 @@
-- cycle through project wide search with F4, S-F4
 
 
 
 plugins to check out:
 https://github.com/dandavison/delta
-https://github.com/folke/snacks.nvim
 https://github.com/echasnovski/mini.nvim
 https://github.com/yetone/avante.nvim
 https://github.com/ThePrimeagen/harpoon
