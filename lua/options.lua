@@ -20,3 +20,5 @@ vim.opt.wrap = false -- don't wrap lines
 vim.opt.laststatus = 2 -- statusline show in every split
 
 vim.o.cursorlineopt = "both" --show cursorline
+
+vim.o.winborder = "rounded"

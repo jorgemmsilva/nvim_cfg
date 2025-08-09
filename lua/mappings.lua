@@ -59,7 +59,7 @@ map("n", "<F4>", "<cmd>cnext<CR>zz", { desc = "Quick-fix list next" })
 map("n", "<S-F4>", "<cmd>cprev<CR>zz", { desc = "Quick-fix list next" })
 map("n", "<F16>", "<cmd>cprev<CR>zz", { desc = "Quick-fix list prev" }) -- workaround for S-F4 not working in rio terminal
 
--- ADD J/K for 2+lines to jumplist
+-- ADD J/K of 2+lines to jumplist
 map("n", "j", [[v:count ? (v:count >= 3 ? "m'" . v:count : '') . 'j' : 'gj']], { noremap = true, expr = true })
 map("n", "k", [[v:count ? (v:count >= 3 ? "m'" . v:count : '') . 'k' : 'gk']], { noremap = true, expr = true })
 
