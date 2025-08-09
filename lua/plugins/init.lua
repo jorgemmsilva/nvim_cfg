@@ -150,6 +150,32 @@ return {
     end,
   },
 
+  {
+    "stevearc/oil.nvim",
+    ---@module 'oil'
+    ---@type oil.SetupOpts
+    opts = {},
+    -- Optional dependencies
+    dependencies = { { "echasnovski/mini.icons", opts = {} } },
+    -- dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if you prefer nvim-web-devicons
+    -- Lazy loading is not recommended because it is very tricky to make it work correctly in all situations.
+    lazy = false,
+    init = function()
+      require("oil").setup()
+    end,
+  },
+
+  {
+    "kylechui/nvim-surround",
+    version = "^3.0.0", -- Use for stability; omit to use `main` branch for the latest features
+    event = "VeryLazy",
+    config = function()
+      require("nvim-surround").setup {
+        -- Configuration here, or leave empty to use defaults
+      }
+    end,
+  },
+
   ------------------------------------------------------------------
   --- RUST
   ------------------------------------------------------------------

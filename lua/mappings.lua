@@ -64,12 +64,12 @@ map("n", "j", [[v:count ? (v:count >= 3 ? "m'" . v:count : '') . 'j' : 'gj']], {
 map("n", "k", [[v:count ? (v:count >= 3 ? "m'" . v:count : '') . 'k' : 'gk']], { noremap = true, expr = true })
 
 -- replace occurances of the current word
--- map(
---   "n",
---   "<leader>s",
---   [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
---   { desc = "replace all occurances current word" }
--- )
+map(
+  "n",
+  "<leader>s",
+  [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
+  { desc = "replace all occurances current word" }
+)
 
 -- Navigate buffers with Ctrl + PageDown/PageUp
 map("n", "<C-PageDown>", ":bnext<CR>", { noremap = true, silent = true, desc = "Next buffer" })
@@ -148,10 +148,42 @@ vim.keymap.set("n", "?", function()
   vim.cmd.RustLsp { "hover", "actions" }
 end, { silent = true, buffer = bufnr })
 
+-- some apps
+map("n", "<leader>u", "<cmd>UndotreeToggle<CR>")
+map("n", "-", "<cmd>Oil<Cr>")
+
 -- TODO:
 -- RustLsp renderDiagnostics
 -- vim.cmd.RustLsp('renderDiagnostic')
 -- RustLsp explainError
 -- vim.cmd.RustLsp('explainError')
 
-map("n", "<leader>u", "<cmd>UndotreeToggle<CR>")
+-- telescope lsp integration
+-- Find references for the word under your cursor.
+map("n", "gr", require("telescope.builtin").lsp_references, { desc = "[G]oto [R]eferences" })
+
+-- Jump to the implementation of the word under your cursor.
+--  Useful when your language has ways of declaring types without an actual implementation.
+map("n", "gi", require("telescope.builtin").lsp_implementations, { desc = "[G]oto [I]mplementation" })
+
+-- Jump to the definition of the word under your cursor.
+--  This is where a variable was first declared, or where a function is defined, etc.
+--  To jump back, press <C-t>.
+map("n", "gd", require("telescope.builtin").lsp_definitions, { desc = "[G]oto [D]efinition" })
+
+-- WARN: This is not Goto Definition, this is Goto Declaration.
+--  For example, in C this would take you to the header.
+map("n", "gD", vim.lsp.buf.declaration, { desc = "[G]oto [D]eclaration" })
+
+-- Fuzzy find all the symbols in your current document.
+--  Symbols are things like variables, functions, types, etc.
+map("n", "go", require("telescope.builtin").lsp_document_symbols, { desc = "Open Document Symbols" })
+
+-- Fuzzy find all the symbols in your current workspace.
+--  Similar to document symbols, except searches over your entire project.
+map("n", "gW", require("telescope.builtin").lsp_dynamic_workspace_symbols, { desc = "Open Workspace Symbols" })
+
+-- Jump to the type of the word under your cursor.
+--  Useful when you're not sure what type a variable is and you want to see
+--  the definition of its *type*, not where it was *defined*.
+map("n", "gt", require("telescope.builtin").lsp_type_definitions, { desc = "[G]oto [T]ype Definition}" })

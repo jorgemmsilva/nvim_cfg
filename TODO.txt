@@ -3,20 +3,18 @@
 
 
 plugins to check out:
+https://github.com/dandavison/delta
+https://github.com/folke/snacks.nvim
 https://github.com/echasnovski/mini.nvim
 https://github.com/yetone/avante.nvim
 https://github.com/ThePrimeagen/harpoon
 https://github.com/ibhagwan/fzf-lua
 https://github.com/stevearc/oil.nvim
-https://github.com/dandavison/delta
-https://github.com/folke/snacks.nvim
-https://github.com/dmtrKovalenko/fff.nvim
 
 
 figure out which GIT plugins are worth using
 
 https://github.com/tpope/vim-fugitive
-
 https://jj-vcs.github.io/jj/latest/
 https://github.com/kdheepak/lazygit.nvim
 https://github.com/rhysd/git-messenger.vim
