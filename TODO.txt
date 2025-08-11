@@ -2,12 +2,8 @@
 
 
 plugins to check out:
-https://github.com/dandavison/delta
-https://github.com/echasnovski/mini.nvim
 https://github.com/yetone/avante.nvim
-https://github.com/ThePrimeagen/harpoon
 https://github.com/ibhagwan/fzf-lua
-https://github.com/stevearc/oil.nvim
 
 
 figure out which GIT plugins are worth using

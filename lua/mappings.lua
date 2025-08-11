@@ -39,7 +39,7 @@ map("n", "N", "Nzzzv")
 map("x", "<leader-p>", "_dP")
 
 -- map a decent keys to telescope stuff
-map("n", "<C-p>", "<cmd>Telescope find_files<CR>", { noremap = true, silent = true, desc = "telescope find files" })
+map("n", "<C-e>", "<cmd>Telescope find_files<CR>", { noremap = true, silent = true, desc = "telescope find files" })
 map("n", "<C-f>", "<cmd>Telescope live_grep<CR>", { noremap = true, silent = true, desc = "telescope live grep" })
 map("n", "<leader>fr", "<cmd>Telescope oldfiles<CR>", { desc = "Recent Files" })
 
@@ -150,7 +150,7 @@ end, { silent = true, buffer = bufnr })
 
 -- some apps
 map("n", "<leader>u", "<cmd>UndotreeToggle<CR>")
-map("n", "-", "<cmd>Oil<Cr>")
+-- map("n", "-", "<cmd>Oil<Cr>")
 
 -- TODO:
 -- RustLsp renderDiagnostics
@@ -187,3 +187,24 @@ map("n", "gW", require("telescope.builtin").lsp_dynamic_workspace_symbols, { des
 --  Useful when you're not sure what type a variable is and you want to see
 --  the definition of its *type*, not where it was *defined*.
 map("n", "gt", require("telescope.builtin").lsp_type_definitions, { desc = "[G]oto [T]ype Definition}" })
+
+-- open file in git
+map("n", "<leader>gg", function()
+  require("snacks").gitbrowse()
+end, { desc = "Open file in git URL" })
+
+-- shift+arrow selection
+map("n", "<S-Up>", "v<Up>", { desc = "Select upward in normal mode" })
+map("n", "<S-Down>", "v<Down>", { desc = "Select downward in normal mode" })
+map("n", "<S-Left>", "v<Left>", { desc = "Select left in normal mode" })
+map("n", "<S-Right>", "v<Right>", { desc = "Select right in normal mode" })
+
+map("v", "<S-Up>", "<Up>", { desc = "Move selection upward" })
+map("v", "<S-Down>", "<Down>", { desc = "Move selection downward" })
+map("v", "<S-Left>", "<Left>", { desc = "Move selection left" })
+map("v", "<S-Right>", "<Right>", { desc = "Move selection right" })
+
+map("i", "<S-Up>", "<Esc>v<Up>", { desc = "Exit insert and select upward" })
+map("i", "<S-Down>", "<Esc>v<Down>", { desc = "Exit insert and select downward" })
+map("i", "<S-Left>", "<Esc>v<Left>", { desc = "Exit insert and select left" })
+map("i", "<S-Right>", "<Esc>v<Right>", { desc = "Exit insert and select right" })

@@ -15,6 +15,19 @@ return {
   ------------------------------------------------------------------
   --- Custom stuff below
   ------------------------------------------------------------------
+  {
+    "hrsh7th/nvim-cmp",
+    opts = function(_, opts)
+      local cmp = require "cmp"
+      -- make sure opts.mapping exists
+      opts.mapping = vim.tbl_extend("force", opts.mapping or {}, {
+        ["<Down>"] = cmp.mapping.select_next_item { behavior = cmp.SelectBehavior.Select },
+        ["<Up>"] = cmp.mapping.select_prev_item { behavior = cmp.SelectBehavior.Select },
+      })
+
+      return opts
+    end,
+  },
 
   {
     "mason-org/mason.nvim",
@@ -183,7 +196,7 @@ return {
       -- or leave it empty to use the default settings
       -- refer to the configuration section below
       bigfile = { enabled = true },
-      dashboard = { enabled = true },
+      -- dashboard = { enabled = true },
       explorer = { enabled = true },
       indent = { enabled = true, animate = { enabled = false } },
       input = { enabled = true },
@@ -253,7 +266,7 @@ return {
         harpoon:list():add()
       end)
       -- toggle harpoon menu
-      vim.keymap.set("n", "<C-e>", function()
+      vim.keymap.set("n", "-", function()
         toggle_telescope(harpoon:list())
       end, { noremap = true, desc = "Open harpoon window" })
     end,
