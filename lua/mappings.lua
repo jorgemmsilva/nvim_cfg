@@ -208,3 +208,6 @@ map("i", "<S-Up>", "<Esc>v<Up>", { desc = "Exit insert and select upward" })
 map("i", "<S-Down>", "<Esc>v<Down>", { desc = "Exit insert and select downward" })
 map("i", "<S-Left>", "<Esc>v<Left>", { desc = "Exit insert and select left" })
 map("i", "<S-Right>", "<Esc>v<Right>", { desc = "Exit insert and select right" })
+
+-- use ctrl-s to save in insert mode
+map("i", "<C-s>", "<Esc>:w<CR>", { desc = "save file" })

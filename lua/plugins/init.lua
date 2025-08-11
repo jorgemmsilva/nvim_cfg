@@ -1,8 +1,47 @@
 return {
   {
     "stevearc/conform.nvim",
-    event = "BufWritePre", -- uncomment for format on save
-    opts = require "configs.conform",
+    event = "BufWritePre", -- format on save
+    opts = function()
+      local opts = require "configs.conform"
+
+      opts.formatters_by_ft = vim.tbl_deep_extend("force", opts.formatters_by_ft or {}, {
+        rust = { "rustfmt_nightly" },
+      })
+
+      opts.formatters = vim.tbl_deep_extend("force", opts.formatters or {}, {
+        rustfmt_nightly = {
+          command = "rustfmt",
+          options = {
+            default_edition = "2021",
+          },
+          env = { RUSTUP_TOOLCHAIN = "nightly" },
+          args = function(self, ctx)
+            local args = {
+              "--emit=stdout",
+              "--unstable-features",
+            }
+            -- Get the edition from Cargo.toml or use default
+            local edition = require("conform.util").parse_rust_edition(ctx.dirname) or self.options.default_edition
+            table.insert(args, "--edition=" .. edition)
+            return args
+          end,
+          stdin = true,
+          cwd = require("conform.util").root_file {
+            "Cargo.toml",
+            "rustfmt.toml",
+            ".rustfmt.toml",
+          },
+        },
+      })
+
+      opts.format_on_save = {
+        lsp_format = "fallback",
+        timeout_ms = 2000,
+      }
+
+      return opts
+    end,
   },
 
   {
@@ -12,9 +51,6 @@ return {
     end,
   },
 
-  ------------------------------------------------------------------
-  --- Custom stuff below
-  ------------------------------------------------------------------
   {
     "hrsh7th/nvim-cmp",
     opts = function(_, opts)
@@ -264,7 +300,7 @@ return {
       -- add to the list
       vim.keymap.set("n", "<leader>a", function()
         harpoon:list():add()
-      end)
+      end, { desc = "add file to harpoon" })
       -- toggle harpoon menu
       vim.keymap.set("n", "-", function()
         toggle_telescope(harpoon:list())
