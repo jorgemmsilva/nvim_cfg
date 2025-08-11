@@ -77,6 +77,8 @@ return {
         "stylua",
         "gopls",
         "rust-analyzer",
+        "solhint",
+        "nomicfoundation-solidity-language-server",
       },
     },
   },
