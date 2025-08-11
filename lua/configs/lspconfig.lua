@@ -55,4 +55,6 @@ vim.lsp.config("*", {
 vim.lsp.config("lua_ls", { settings = lua_lsp_settings })
 vim.lsp.enable "lua_ls"
 
+------------------------------------------------------------------
+------------------------------------------------------------------
 vim.lsp.enable(servers)
