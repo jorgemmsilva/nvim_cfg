@@ -64,7 +64,8 @@ function ToggleAutoRefresh()
   else
     vim.o.autoread = true
     vim.api.nvim_create_augroup("AutoRefresh", { clear = true })
-    vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHoldI" }, {
+    -- vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHoldI" }, {
+    vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter" }, {
       group = "AutoRefresh",
       command = "if mode() != 'c' | checktime | endif",
       pattern = "*",
