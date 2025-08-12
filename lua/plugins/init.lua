@@ -7,6 +7,7 @@ return {
 
       opts.formatters_by_ft = vim.tbl_deep_extend("force", opts.formatters_by_ft or {}, {
         rust = { "rustfmt_nightly" },
+        solidity = { "forge_fmt" },
       })
 
       opts.formatters = vim.tbl_deep_extend("force", opts.formatters or {}, {

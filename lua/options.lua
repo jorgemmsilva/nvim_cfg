@@ -17,7 +17,7 @@ vim.opt.scrolloff = 8 -- keep 8 lines, don't let the cursor hit the bottom of th
 
 vim.opt.wrap = false -- don't wrap lines
 
-vim.opt.laststatus = 2 -- statusline show in every split
+-- vim.opt.laststatus = 2 -- statusline show in every split
 
 vim.o.cursorlineopt = "both" --show cursorline
 
