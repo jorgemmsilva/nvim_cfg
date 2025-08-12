@@ -11,7 +11,7 @@ M.base46 = {
 
   hl_override = {
     Search = { bg = "#ff6600", fg = "#ffffff" },
-    LspSignatureActiveParameter = { fg = "none", bold = true, standout = true },
+    LspSignatureActiveParameter = { fg = "none", standout = true },
   },
 }
 
