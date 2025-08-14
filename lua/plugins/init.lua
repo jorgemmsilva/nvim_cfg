@@ -1,4 +1,31 @@
 return {
+
+  {
+    "neovim/nvim-lspconfig",
+    config = function()
+      require "configs.lspconfig"
+    end,
+  },
+
+  {
+    "Bekaboo/dropbar.nvim",
+    lazy = false,
+    -- optional, but required for fuzzy finder support
+    dependencies = {
+      "nvim-telescope/telescope-fzf-native.nvim",
+      build = "make",
+    },
+    config = function()
+      local dropbar_api = require "dropbar.api"
+      vim.keymap.set("n", "<Leader>;", dropbar_api.pick, { desc = "Pick symbols in winbar" })
+      -- vim.keymap.set("n", "[;", dropbar_api.goto_context_start, { desc = "Go to start of current context" })
+      vim.keymap.set("n", "<C-S-.>", dropbar_api.select_next_context, { desc = "Select next context" })
+    end,
+    opts = {
+      bar = { hover = false },
+    },
+  },
+
   {
     "stevearc/conform.nvim",
     event = "BufWritePre", -- format on save
@@ -59,13 +86,6 @@ return {
   },
 
   {
-    "neovim/nvim-lspconfig",
-    config = function()
-      require "configs.lspconfig"
-    end,
-  },
-
-  {
     "hrsh7th/nvim-cmp",
     opts = function(_, opts)
       local cmp = require "cmp"
@@ -74,13 +94,14 @@ return {
         ["<Up>"] = cmp.mapping.select_prev_item { behavior = cmp.SelectBehavior.Select },
       })
 
-      opts.sources = vim.tbl_extend("force", opts.sources or {}, {
-        {
-          name = "lazydev",
-          group_index = 0, -- set group index to 0 to skip loading LuaLS completions
-        },
-        { name = "supermaven" },
-      })
+      -- NOTE: this seems to brick auto complete in other LSPS like solidity
+      -- opts.sources = vim.tbl_extend("force", opts.sources or {}, {
+      --   {
+      --     name = "lazydev",
+      --     group_index = 0, -- set group index to 0 to skip loading LuaLS completions
+      --   },
+      --   -- { name = "supermaven" },
+      -- })
 
       return opts
     end,
@@ -133,17 +154,17 @@ return {
 
   { "mbbill/undotree", lazy = false },
 
-  {
-    "levouh/tint.nvim",
-    event = "VeryLazy",
-    opts = {
-      tint = 0, -- Negative values darken inactive windows
-      saturation = 0.3, -- Slight desaturation
-    },
-    keys = {
-      { "<leader>ti", "<cmd>TintToggle<cr>", desc = "Toggle window tinting" },
-    },
-  },
+  -- {
+  --   "levouh/tint.nvim",
+  --   event = "VeryLazy",
+  --   opts = {
+  --     tint = 0, -- Negative values darken inactive windows
+  --     saturation = 0.3, -- Slight desaturation
+  --   },
+  --   keys = {
+  --     { "<leader>ti", "<cmd>TintToggle<cr>", desc = "Toggle window tinting" },
+  --   },
+  -- },
 
   {
     "leath-dub/snipe.nvim",
@@ -383,6 +404,17 @@ return {
     end,
   },
 
+  {
+    "MeanderingProgrammer/render-markdown.nvim",
+    lazy = false,
+    dependencies = { "nvim-treesitter/nvim-treesitter", "echasnovski/mini.nvim" }, -- if you use the mini.nvim suite
+    -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.icons' }, -- if you use standalone mini plugins
+    -- dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" }, -- if you prefer nvim-web-devicons
+    ---@module 'render-markdown'
+    ---@type render.md.UserConfig
+    opts = {},
+  },
+
   ------------------------------------------------------------------
   --- RUST
   ------------------------------------------------------------------
@@ -589,7 +621,7 @@ return {
           -- accept_word = "<S-l>",
         },
         color = {
-          suggestion_color = "#ffffff",
+          suggestion_color = "#7a7e85",
           cterm = 244,
         },
       }

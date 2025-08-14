@@ -6,12 +6,13 @@
 local M = {}
 
 M.base46 = {
-  theme = "bearded-arc",
+  theme = "doomchad",
   -- theme = "jellybeans",
 
   hl_override = {
     Search = { bg = "#ff6600", fg = "#ffffff" },
     LspSignatureActiveParameter = { fg = "none", standout = true },
+    ["@variable"] = { fg = "white" },
   },
 }
 

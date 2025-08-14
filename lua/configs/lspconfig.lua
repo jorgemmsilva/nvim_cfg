@@ -1,6 +1,12 @@
 require("nvchad.configs.lspconfig").defaults()
 
-local servers = { "html", "cssls", "gopls", "solidity_ls_nomicfoundation", "lua_ls" }
+local servers = {
+  "html",
+  "cssls",
+  "gopls",
+  "solidity_ls_nomicfoundation",
+  "lua_ls",
+}
 
 -- read :h vim.lsp.config for changing options of lsp servers
 
