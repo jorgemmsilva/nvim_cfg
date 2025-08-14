@@ -211,3 +211,6 @@ map("i", "<S-Right>", "<Esc>v<Right>", { desc = "Exit insert and select right" }
 
 -- use ctrl-s to save in insert mode
 map("i", "<C-s>", "<Esc>:w<CR>", { desc = "save file" })
+
+-- close all buffers except the current one
+map("n", "<leader><S-x>", "<cmd>%bd|e#<CR>", { desc = "close all buffers except the current one" })

@@ -1,30 +1,77 @@
 return {
 
+  ------------------------------------------------------------------
+  --- NVChad
+  ------------------------------------------------------------------
+  { "nvim-lua/plenary.nvim" },
+
   {
-    "neovim/nvim-lspconfig",
-    config = function()
-      require "configs.lspconfig"
+    "nvchad/base46",
+    build = function()
+      require("base46").load_all_highlights()
     end,
   },
 
   {
-    "Bekaboo/dropbar.nvim",
+    "nvchad/ui",
     lazy = false,
-    -- optional, but required for fuzzy finder support
-    dependencies = {
-      "nvim-telescope/telescope-fzf-native.nvim",
-      build = "make",
-    },
     config = function()
-      local dropbar_api = require "dropbar.api"
-      vim.keymap.set("n", "<Leader>;", dropbar_api.pick, { desc = "Pick symbols in winbar" })
-      -- vim.keymap.set("n", "[;", dropbar_api.goto_context_start, { desc = "Go to start of current context" })
-      vim.keymap.set("n", "<C-S-.>", dropbar_api.select_next_context, { desc = "Select next context" })
+      require "nvchad"
     end,
-    opts = {
-      bar = { hover = false },
-    },
   },
+
+  "nvzone/volt",
+  "nvzone/menu",
+  { "nvzone/minty", cmd = { "Huefy", "Shades" } },
+
+  {
+    "nvim-tree/nvim-web-devicons",
+    opts = function()
+      dofile(vim.g.base46_cache .. "devicons")
+      return { override = require "nvchad.icons.devicons" }
+    end,
+  },
+
+  {
+    "lukas-reineke/indent-blankline.nvim",
+    event = "User FilePost",
+    opts = {
+      indent = { char = "│", highlight = "IblChar" },
+      scope = { char = "│", highlight = "IblScopeChar" },
+    },
+    config = function(_, opts)
+      dofile(vim.g.base46_cache .. "blankline")
+
+      local hooks = require "ibl.hooks"
+      hooks.register(hooks.type.WHITESPACE, hooks.builtin.hide_first_space_indent_level)
+      require("ibl").setup(opts)
+
+      dofile(vim.g.base46_cache .. "blankline")
+    end,
+  },
+
+  -- file managing , picker etc
+  {
+    "nvim-tree/nvim-tree.lua",
+    cmd = { "NvimTreeToggle", "NvimTreeFocus" },
+    opts = function()
+      return require "nvchad.configs.nvimtree"
+    end,
+  },
+
+  {
+    "folke/which-key.nvim",
+    keys = { "<leader>", "<c-w>", '"', "'", "`", "c", "v", "g" },
+    cmd = "WhichKey",
+    opts = function()
+      dofile(vim.g.base46_cache .. "whichkey")
+      return {}
+    end,
+  },
+
+  ------------------------------------------------------------------
+  --- Formatting
+  ------------------------------------------------------------------
 
   {
     "stevearc/conform.nvim",
@@ -35,6 +82,7 @@ return {
       opts.formatters_by_ft = vim.tbl_deep_extend("force", opts.formatters_by_ft or {}, {
         rust = { "rustfmt_nightly" },
         solidity = { "forge_fmt" },
+        lua = { "stylua" },
       })
 
       opts.formatters = vim.tbl_deep_extend("force", opts.formatters or {}, {
@@ -72,38 +120,18 @@ return {
     end,
   },
 
-  -- lazy loads lua projects to LUA_LSP as they are required
-  {
-    "folke/lazydev.nvim",
-    ft = "lua", -- only load on lua files
-    opts = {
-      library = {
-        -- See the configuration section for more details
-        -- Load luvit types when the `vim.uv` word is found
-        { path = "${3rd}/luv/library", words = { "vim%.uv" } },
-      },
-    },
-  },
+  ------------------------------------------------------------------
+  --- LSP stuff
+  ------------------------------------------------------------------
 
   {
-    "hrsh7th/nvim-cmp",
-    opts = function(_, opts)
-      local cmp = require "cmp"
-      opts.mapping = vim.tbl_extend("force", opts.mapping or {}, {
-        ["<Down>"] = cmp.mapping.select_next_item { behavior = cmp.SelectBehavior.Select },
-        ["<Up>"] = cmp.mapping.select_prev_item { behavior = cmp.SelectBehavior.Select },
-      })
-
-      -- NOTE: this seems to brick auto complete in other LSPS like solidity
-      -- opts.sources = vim.tbl_extend("force", opts.sources or {}, {
-      --   {
-      --     name = "lazydev",
-      --     group_index = 0, -- set group index to 0 to skip loading LuaLS completions
-      --   },
-      --   -- { name = "supermaven" },
-      -- })
-
-      return opts
+    "neovim/nvim-lspconfig",
+    event = "User FilePost",
+    -- dependencies = {
+    --   { "hrsh7th/nvim-cmp" },
+    -- },
+    config = function()
+      require "configs.lspconfig"
     end,
   },
 
@@ -125,6 +153,158 @@ return {
     },
   },
 
+  ------------------------------------------------------------------
+  --- Git stuff
+  ------------------------------------------------------------------
+
+  {
+    "lewis6991/gitsigns.nvim",
+    event = "User FilePost",
+    opts = function()
+      return require "nvchad.configs.gitsigns"
+    end,
+  },
+
+  ------------------------------------------------------------------
+  --- Autocompletion
+  ------------------------------------------------------------------
+  {
+    "hrsh7th/nvim-cmp",
+    event = "InsertEnter",
+    dependencies = {
+      {
+        -- snippet plugin
+        "L3MON4D3/LuaSnip",
+        dependencies = "rafamadriz/friendly-snippets",
+        opts = { history = true, updateevents = "TextChanged,TextChangedI" },
+        config = function(_, opts)
+          require("luasnip").config.set_config(opts)
+          require "nvchad.configs.luasnip"
+        end,
+      },
+
+      -- autopairing of (){}[] etc
+      {
+        "windwp/nvim-autopairs",
+        opts = {
+          fast_wrap = {},
+          disable_filetype = { "TelescopePrompt", "vim" },
+        },
+        config = function(_, opts)
+          require("nvim-autopairs").setup(opts)
+
+          -- setup cmp for autopairs
+          local cmp_autopairs = require "nvim-autopairs.completion.cmp"
+          require("cmp").event:on("confirm_done", cmp_autopairs.on_confirm_done())
+        end,
+      },
+
+      -- cmp sources plugins
+      {
+        "saadparwaiz1/cmp_luasnip",
+        "hrsh7th/cmp-nvim-lua",
+        "hrsh7th/cmp-nvim-lsp",
+        "hrsh7th/cmp-buffer",
+        "https://codeberg.org/FelipeLema/cmp-async-path.git",
+        -- "saecki/crates.nvim",
+      },
+    },
+
+    opts = function()
+      local opts = require "nvchad.configs.cmp"
+
+      local cmp = require "cmp"
+      opts.mapping = vim.tbl_extend("force", opts.mapping or {}, {
+        ["<Down>"] = cmp.mapping.select_next_item { behavior = cmp.SelectBehavior.Select },
+        ["<Up>"] = cmp.mapping.select_prev_item { behavior = cmp.SelectBehavior.Select },
+      })
+
+      opts.mapping["<Tab>"] = vim.NIL
+      opts.mapping["<S-Tab>"] = vim.NIL
+
+      table.insert(opts.sources, { name = "lazydev", group_index = 0 })
+      table.insert(opts.sources, { name = "crates" })
+      -- table.insert(opts.sources, { name = "supermaven" })
+
+      return opts
+    end,
+  },
+
+  {
+    "supermaven-inc/supermaven-nvim",
+    lazy = false,
+    config = function()
+      require("supermaven-nvim").setup {
+        keymaps = {
+          accept_suggestion = "<Tab>",
+          -- clear_suggestion = "<C-S-h>",
+          -- accept_word = "<S-l>",
+        },
+        color = {
+          suggestion_color = "#7a7e85",
+          cterm = 244,
+        },
+      }
+    end,
+  },
+
+  ------------------------------------------------------------------
+  --- MISC
+  ------------------------------------------------------------------
+  {
+    "nvim-telescope/telescope.nvim",
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    cmd = "Telescope",
+    opts = function()
+      return require "nvchad.configs.telescope"
+    end,
+  },
+
+  {
+    "nvim-treesitter/nvim-treesitter",
+    event = { "BufReadPost", "BufNewFile" },
+    cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
+    build = ":TSUpdate",
+    opts = function()
+      return require "nvchad.configs.treesitter"
+    end,
+    config = function(_, opts)
+      require("nvim-treesitter.configs").setup(opts)
+    end,
+  },
+
+  {
+    "Bekaboo/dropbar.nvim",
+    lazy = false,
+    -- optional, but required for fuzzy finder support
+    dependencies = {
+      "nvim-telescope/telescope-fzf-native.nvim",
+      build = "make",
+    },
+    config = function()
+      local dropbar_api = require "dropbar.api"
+      vim.keymap.set("n", "<Leader>;", dropbar_api.pick, { desc = "Pick symbols in winbar" })
+      -- vim.keymap.set("n", "[;", dropbar_api.goto_context_start, { desc = "Go to start of current context" })
+      vim.keymap.set("n", "<C-S-.>", dropbar_api.select_next_context, { desc = "Select next context" })
+    end,
+    opts = {
+      bar = { hover = false },
+    },
+  },
+
+  -- lazy loads lua projects to LUA_LSP as they are required
+  {
+    "folke/lazydev.nvim",
+    ft = "lua", -- only load on lua files
+    opts = {
+      library = {
+        -- See the configuration section for more details
+        -- Load luvit types when the `vim.uv` word is found
+        { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+      },
+    },
+  },
+
   {
     "rmagatti/auto-session",
     lazy = false,
@@ -137,23 +317,36 @@ return {
     },
   },
 
+  -- TODO git colors are not correct
   {
     "petertriho/nvim-scrollbar",
     lazy = false,
     config = function()
-      require("scrollbar").setup()
+      require("scrollbar").setup {
+        handle = {
+          color = "White",
+        },
+        marks = {
+          Search = { color = "#ff6600" },
+          Error = { color = "DiagnosticError" },
+          Warn = { color = "DiagnosticWarn" },
+          Info = { color = "DiagnosticInfo" },
+          Hint = { color = "DiagnosticHint" },
+          Misc = { color = "Identifier" },
+        },
+      }
       require("scrollbar.handlers.search").setup {
         -- hlslens config overrides
+        override_lens = function() end,
       }
       require("gitsigns").setup()
       require("scrollbar.handlers.gitsigns").setup()
     end,
   },
 
-  { "kevinhwang91/nvim-hlslens" },
-
-  { "mbbill/undotree", lazy = false },
-
+  {
+    "kevinhwang91/nvim-hlslens",
+  },
   -- {
   --   "levouh/tint.nvim",
   --   event = "VeryLazy",
@@ -209,7 +402,7 @@ return {
         error = { "DiagnosticError", "ErrorMsg", "#DC2626" },
         warning = { "DiagnosticWarn", "WarningMsg", "#FBBF24" },
         info = { "DiagnosticInfo", "#2563EB" },
-        hint = { "DiagnosticHint", "#10B981" },
+        hint = { "#f28d11", "DiagnosticHint", "#10B981" },
         default = { "Identifier", "#7C3AED" },
         test = { "Identifier", "#FF00FF" },
       },
@@ -263,14 +456,6 @@ return {
   },
 
   {
-    "unblevable/quick-scope",
-    lazy = false,
-    init = function()
-      vim.g.qs_highlight_on_keys = { "f", "F", "t", "T" }
-    end,
-  },
-
-  {
     "Goose97/timber.nvim",
     version = "*", -- Use for stability; omit to use `main` branch for the latest features
     event = "VeryLazy",
@@ -281,26 +466,34 @@ return {
     end,
   },
 
-  {
-    "MagicDuck/grug-far.nvim",
-    -- Note (lazy loading): grug-far.lua defers all it's requires so it's lazy by default
-    -- additional lazy config to defer loading is not really needed...
-    init = function()
-      -- optional setup call to override plugin options
-      -- alternatively you can set options with vim.g.grug_far = { ... }
-      require("grug-far").setup {
-        -- options, see Configuration section below
-        -- there are no required options atm
-      }
-    end,
-  },
+  -- {
+  --   "unblevable/quick-scope",
+  --   lazy = false,
+  --   init = function()
+  --     vim.g.qs_highlight_on_keys = { "f", "F", "t", "T" }
+  --   end,
+  -- },
+  --
+  -- {
+  --   "MagicDuck/grug-far.nvim",
+  --   -- Note (lazy loading): grug-far.lua defers all it's requires so it's lazy by default
+  --   -- additional lazy config to defer loading is not really needed...
+  --   init = function()
+  --     -- optional setup call to override plugin options
+  --     -- alternatively you can set options with vim.g.grug_far = { ... }
+  --     require("grug-far").setup {
+  --       -- options, see Configuration section below
+  --       -- there are no required options atm
+  --     }
+  --   end,
+  -- },
 
   {
     "stevearc/oil.nvim",
     opts = {},
     -- Optional dependencies
-    dependencies = { { "echasnovski/mini.icons", opts = {} } },
-    -- dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if you prefer nvim-web-devicons
+    -- dependencies = { { "echasnovski/mini.icons", opts = {} } },
+    dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if you prefer nvim-web-devicons
     -- Lazy loading is not recommended because it is very tricky to make it work correctly in all situations.
     lazy = false,
     init = function()
@@ -435,6 +628,7 @@ return {
           },
         },
         server = {
+          -- on_attach = function(client, bufnr) end,
           default_settings = {
             ["rust-analyzer"] = {
               cargo = {
@@ -517,9 +711,6 @@ return {
             enabled = true,
           },
         },
-      }
-      require("cmp").setup.buffer {
-        sources = { { name = "crates" } },
       }
     end,
   },
@@ -610,21 +801,4 @@ return {
   --     },
   --   },
   -- },
-  {
-    "supermaven-inc/supermaven-nvim",
-    lazy = false,
-    config = function()
-      require("supermaven-nvim").setup {
-        keymaps = {
-          accept_suggestion = "<Tab>",
-          clear_suggestion = "<S-h>",
-          -- accept_word = "<S-l>",
-        },
-        color = {
-          suggestion_color = "#7a7e85",
-          cterm = 244,
-        },
-      }
-    end,
-  },
 }
