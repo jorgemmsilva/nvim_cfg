@@ -127,9 +127,6 @@ return {
   {
     "neovim/nvim-lspconfig",
     event = "User FilePost",
-    -- dependencies = {
-    --   { "hrsh7th/nvim-cmp" },
-    -- },
     config = function()
       require "configs.lspconfig"
     end,
@@ -172,16 +169,16 @@ return {
     "hrsh7th/nvim-cmp",
     event = "InsertEnter",
     dependencies = {
-      {
-        -- snippet plugin
-        "L3MON4D3/LuaSnip",
-        dependencies = "rafamadriz/friendly-snippets",
-        opts = { history = true, updateevents = "TextChanged,TextChangedI" },
-        config = function(_, opts)
-          require("luasnip").config.set_config(opts)
-          require "nvchad.configs.luasnip"
-        end,
-      },
+      -- {
+      --   -- snippet plugin
+      --   "L3MON4D3/LuaSnip",
+      --   dependencies = "rafamadriz/friendly-snippets",
+      --   opts = { history = true, updateevents = "TextChanged,TextChangedI" },
+      --   config = function(_, opts)
+      --     require("luasnip").config.set_config(opts)
+      --     require "nvchad.configs.luasnip"
+      --   end,
+      -- },
 
       -- autopairing of (){}[] etc
       {
@@ -225,6 +222,13 @@ return {
       table.insert(opts.sources, { name = "lazydev", group_index = 0 })
       table.insert(opts.sources, { name = "crates" })
       -- table.insert(opts.sources, { name = "supermaven" })
+      opts.sorting = {
+        comparators = {
+          cmp.config.compare.exact,
+          cmp.config.compare.offset,
+          cmp.config.compare.recently_used,
+        },
+      }
 
       return opts
     end,
@@ -251,6 +255,7 @@ return {
   ------------------------------------------------------------------
   --- MISC
   ------------------------------------------------------------------
+  -- { "karb94/neoscroll.nvim" },
   {
     "nvim-telescope/telescope.nvim",
     dependencies = { "nvim-treesitter/nvim-treesitter" },
@@ -317,36 +322,39 @@ return {
     },
   },
 
-  -- TODO git colors are not correct
-  {
-    "petertriho/nvim-scrollbar",
-    lazy = false,
-    config = function()
-      require("scrollbar").setup {
-        handle = {
-          color = "White",
-        },
-        marks = {
-          Search = { color = "#ff6600" },
-          Error = { color = "DiagnosticError" },
-          Warn = { color = "DiagnosticWarn" },
-          Info = { color = "DiagnosticInfo" },
-          Hint = { color = "DiagnosticHint" },
-          Misc = { color = "Identifier" },
-        },
-      }
-      require("scrollbar.handlers.search").setup {
-        -- hlslens config overrides
-        override_lens = function() end,
-      }
-      require("gitsigns").setup()
-      require("scrollbar.handlers.gitsigns").setup()
-    end,
-  },
+  -- {
+  --   "petertriho/nvim-scrollbar",
+  --   lazy = false,
+  --   config = function()
+  --     require("scrollbar").setup {
+  --       -- TODO git colors are not correct
+  --       handle = {
+  --         color = "White",
+  --       },
+  --       marks = {
+  --         Search = { color = "#ff6600" },
+  --         Error = { color = "DiagnosticError" },
+  --         Warn = { color = "DiagnosticWarn" },
+  --         Info = { color = "DiagnosticInfo" },
+  --         Hint = { color = "DiagnosticHint" },
+  --         Misc = { color = "Identifier" },
+  --         GitAdd = { color = "green" },
+  --         GitChange = { color = "orange" },
+  --         GitDelete = { color = "red" },
+  --       },
+  --     }
+  --     require("scrollbar.handlers.search").setup {
+  --       -- hlslens config overrides
+  --       override_lens = function() end,
+  --     }
+  --     require("gitsigns").setup()
+  --     require("scrollbar.handlers.gitsigns").setup()
+  --   end,
+  -- },
 
-  {
-    "kevinhwang91/nvim-hlslens",
-  },
+  -- {
+  --   "kevinhwang91/nvim-hlslens",
+  -- },
   -- {
   --   "levouh/tint.nvim",
   --   event = "VeryLazy",
