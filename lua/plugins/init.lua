@@ -1,5 +1,12 @@
 return {
 
+  {
+    "NvChad/NvChad",
+    lazy = false,
+    branch = "v2.5",
+    -- import = "nvchad.plugins",
+  },
+
   ------------------------------------------------------------------
   --- NVChad
   ------------------------------------------------------------------
@@ -22,7 +29,6 @@ return {
 
   -- { "nvzone/volt", lazy = true },
   -- { "nvzone/menu", lazy = true },
-
   -- { "nvzone/minty", cmd = { "Huefy", "Shades" } },
 
   {
@@ -46,8 +52,6 @@ return {
       local hooks = require "ibl.hooks"
       hooks.register(hooks.type.WHITESPACE, hooks.builtin.hide_first_space_indent_level)
       require("ibl").setup(opts)
-
-      dofile(vim.g.base46_cache .. "blankline")
     end,
   },
 
@@ -55,9 +59,38 @@ return {
   {
     "nvim-tree/nvim-tree.lua",
     cmd = { "NvimTreeToggle", "NvimTreeFocus" },
-    opts = function()
-      return require "nvchad.configs.nvimtree"
-    end,
+    opts = {
+      filters = { dotfiles = false },
+      disable_netrw = true,
+      hijack_cursor = true,
+      sync_root_with_cwd = true,
+      update_focused_file = {
+        enable = true,
+        update_root = false,
+      },
+      view = {
+        width = 30,
+        preserve_window_proportions = true,
+      },
+      renderer = {
+        root_folder_label = false,
+        highlight_git = true,
+        indent_markers = { enable = true },
+        icons = {
+          glyphs = {
+            default = "󰈚",
+            folder = {
+              default = "",
+              empty = "",
+              empty_open = "",
+              open = "",
+              symlink = "",
+            },
+            git = { unmerged = "" },
+          },
+        },
+      },
+    },
   },
 
   {
@@ -158,9 +191,12 @@ return {
   {
     "lewis6991/gitsigns.nvim",
     event = "User FilePost",
-    opts = function()
-      return require "nvchad.configs.gitsigns"
-    end,
+    opts = {
+      signs = {
+        delete = { text = "󰍵" },
+        changedelete = { text = "󱕖" },
+      },
+    },
   },
 
   ------------------------------------------------------------------
@@ -261,9 +297,28 @@ return {
     "nvim-telescope/telescope.nvim",
     dependencies = { "nvim-treesitter/nvim-treesitter" },
     cmd = "Telescope",
-    opts = function()
-      return require "nvchad.configs.telescope"
-    end,
+    opts = {
+      defaults = {
+        prompt_prefix = "   ",
+        selection_caret = " ",
+        entry_prefix = " ",
+        sorting_strategy = "ascending",
+        layout_config = {
+          horizontal = {
+            prompt_position = "top",
+            preview_width = 0.55,
+          },
+          width = 0.87,
+          height = 0.80,
+        },
+        mappings = {
+          n = { ["q"] = require("telescope.actions").close },
+        },
+      },
+
+      extensions_list = { "themes", "terms" },
+      extensions = {},
+    },
   },
 
   {
@@ -271,9 +326,16 @@ return {
     event = { "BufReadPost", "BufNewFile" },
     cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
     build = ":TSUpdate",
-    opts = function()
-      return require "nvchad.configs.treesitter"
-    end,
+    opts = {
+      ensure_installed = { "lua", "luadoc", "printf", "vim", "vimdoc" },
+
+      highlight = {
+        enable = true,
+        use_languagetree = true,
+      },
+
+      indent = { enable = true },
+    },
     config = function(_, opts)
       require("nvim-treesitter.configs").setup(opts)
     end,

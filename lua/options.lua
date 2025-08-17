@@ -34,7 +34,7 @@ vim.o.smartcase = true
 vim.o.mouse = "a" -- mouse enabled for [a]ll modes
 
 -- Numbers
--- vim.o.number = true
+vim.o.number = true
 -- vim.o.numberwidth = 2
 -- vim.o.ruler = false
 

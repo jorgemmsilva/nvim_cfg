@@ -15,18 +15,19 @@ local lazy_config = require "configs.lazy"
 
 -- load plugins
 require("lazy").setup({
-  {
-    "NvChad/NvChad",
-    lazy = false,
-    branch = "v2.5",
-    -- import = "nvchad.plugins",
-  },
   { import = "plugins" },
 }, lazy_config)
 
 -- load theme
-dofile(vim.g.base46_cache .. "defaults")
-dofile(vim.g.base46_cache .. "statusline")
+pcall(function()
+  dofile(vim.g.base46_cache .. "defaults")
+  dofile(vim.g.base46_cache .. "statusline")
+  dofile(vim.g.base46_cache .. "syntax")
+  dofile(vim.g.base46_cache .. "treesitter")
+  dofile(vim.g.base46_cache .. "telescope")
+  dofile(vim.g.base46_cache .. "nvimtree")
+  dofile(vim.g.base46_cache .. "git")
+end)
 
 require "options"
 require "autocmds"
