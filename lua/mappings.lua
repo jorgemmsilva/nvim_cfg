@@ -107,7 +107,7 @@ map("v", "K", ":m '<-2<CR>gv=gv")
 vim.opt.clipboard = "" -- disables use of system clipboard
 map("n", "<leader>y", '"+y', { desc = "copy to system clipboard" })
 map("v", "<leader>y", '"+y', { desc = "copy to system clipboard" })
-map("i", "<C-p>", "<C-r>+", { desc = "Paste from clipboard in insert mode" })
+map("i", "<C-p>", '<C-r>"', { desc = "Paste from clipboard in insert mode" })
 
 -- navigate "quick-fix list"
 map("n", "<leader>j", "<cmd>cnext<CR>zz", { desc = "Quick-fix list next" })
