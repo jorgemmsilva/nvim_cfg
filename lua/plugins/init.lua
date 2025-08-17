@@ -20,9 +20,10 @@ return {
     end,
   },
 
-  "nvzone/volt",
-  "nvzone/menu",
-  { "nvzone/minty", cmd = { "Huefy", "Shades" } },
+  -- { "nvzone/volt", lazy = true },
+  -- { "nvzone/menu", lazy = true },
+
+  -- { "nvzone/minty", cmd = { "Huefy", "Shades" } },
 
   {
     "nvim-tree/nvim-web-devicons",
