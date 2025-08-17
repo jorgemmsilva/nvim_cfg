@@ -1,6 +1,3 @@
-
-
-
 plugins to check out:
 https://github.com/yetone/avante.nvim
 https://github.com/ibhagwan/fzf-lua
