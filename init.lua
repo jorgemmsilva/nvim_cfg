@@ -27,6 +27,7 @@ pcall(function()
   dofile(vim.g.base46_cache .. "telescope")
   dofile(vim.g.base46_cache .. "nvimtree")
   dofile(vim.g.base46_cache .. "git")
+  dofile(vim.g.base46_cache .. "blink")
 end)
 
 require "options"

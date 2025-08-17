@@ -273,3 +273,8 @@ map("i", "<C-s>", "<Esc>:w<CR>", { desc = "save file" })
 
 -- close all buffers except the current one
 map("n", "<leader><S-x>", "<cmd>%bd|e#<CR>", { desc = "close all buffers except the current one" })
+
+-- open neogit in a split
+map("n", "gt", function()
+  require("neogit").open { kind = "split" }
+end, { desc = "open neogit in a split" })
