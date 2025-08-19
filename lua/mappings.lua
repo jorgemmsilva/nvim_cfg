@@ -21,7 +21,9 @@ map("n", "<C-l>", "<C-w>l", { desc = "switch window right" })
 map("n", "<C-j>", "<C-w>j", { desc = "switch window down" })
 map("n", "<C-k>", "<C-w>k", { desc = "switch window up" })
 
-map("n", "<C-s>", "<cmd>w<CR>", { desc = "general save file" })
+map({ "n", "i" }, "<C-s>", "<Esc>:w<CR>", { desc = "save file" })
+map({ "n", "i" }, "<C-S-s>", "<Esc>:wa<CR>", { desc = "Save all buffers" })
+
 map("n", "<C-c>", "<cmd>%y+<CR>", { desc = "general copy whole file" })
 
 map({ "n", "x" }, "<leader>fm", function()
@@ -107,7 +109,7 @@ map("v", "K", ":m '<-2<CR>gv=gv")
 vim.opt.clipboard = "" -- disables use of system clipboard
 map("n", "<leader>y", '"+y', { desc = "copy to system clipboard" })
 map("v", "<leader>y", '"+y', { desc = "copy to system clipboard" })
-map("i", "<C-p>", '<C-r>"', { desc = "Paste from clipboard in insert mode" })
+map({ "i", "!", "t", "c" }, "<C-p>", '<C-r>"', { desc = "Paste from clipboard in insert mode" })
 
 -- navigate "quick-fix list"
 map("n", "<leader>j", "<cmd>cnext<CR>zz", { desc = "Quick-fix list next" })
@@ -147,9 +149,34 @@ map("i", "<C-j>", "<Down>", { desc = "move down" })
 map("i", "<C-k>", "<Up>", { desc = "move up" })
 
 -- toggle terminal
-map({ "n", "t" }, "<C-`>", function()
-  require("nvchad.term").toggle { pos = "sp", id = "htoggleTerm" }
-end, { desc = "terminal toggle horizonal term" })
+map({ "n", "t", "i" }, "<C-`>", function()
+  -- require("nvchad.term").toggle { pos = "sp", id = "htoggleTerm" }
+  local current_buf = vim.api.nvim_get_current_buf()
+  local current_buf_name = vim.api.nvim_buf_get_name(current_buf)
+
+  -- If we're currently in a terminal, go back to previous buffer
+  if current_buf_name:match "^term://" then
+    vim.cmd "buffer #"
+    return
+  end
+
+  -- Look for existing terminal buffer
+  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+    if vim.api.nvim_buf_is_valid(buf) then
+      local buf_name = vim.api.nvim_buf_get_name(buf)
+      if buf_name:match "^term://" then
+        -- Found terminal buffer, switch to it
+        vim.cmd("buffer " .. buf)
+        -- vim.cmd "startinsert"
+        return
+      end
+    end
+  end
+
+  -- No terminal found, create new one
+  vim.cmd "terminal"
+  vim.cmd "startinsert"
+end, { desc = "terminal toggle" })
 
 -- map <Esc> to exit terminal mode
 map("t", "<Esc>", [[<C-\><C-n>]], { noremap = true })
@@ -268,13 +295,11 @@ map("i", "<S-Down>", "<Esc>v<Down>", { desc = "Exit insert and select downward" 
 map("i", "<S-Left>", "<Esc>v<Left>", { desc = "Exit insert and select left" })
 map("i", "<S-Right>", "<Esc>v<Right>", { desc = "Exit insert and select right" })
 
--- use ctrl-s to save in insert mode
-map("i", "<C-s>", "<Esc>:w<CR>", { desc = "save file" })
-
 -- close all buffers except the current one
 map("n", "<leader><S-x>", "<cmd>%bd|e#<CR>", { desc = "close all buffers except the current one" })
 
--- open neogit in a split
-map("n", "gt", function()
-  require("neogit").open { kind = "split" }
-end, { desc = "open neogit in a split" })
+map("n", "gh", function()
+  require("neogit").open() -- { kind = "split" }
+end, { desc = "open neogit" })
+
+map("n", "gf", "gF", { desc = "open file under cursor (uses line and column if present" })

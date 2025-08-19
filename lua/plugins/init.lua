@@ -107,6 +107,8 @@ return {
   --- Formatting
   ------------------------------------------------------------------
 
+  -- TODO formatting for toml files
+
   {
     "stevearc/conform.nvim",
     event = "BufWritePre", -- format on save
@@ -199,6 +201,8 @@ return {
     },
   },
 
+  { "sindrets/diffview.nvim", lazy = false },
+
   {
     "NeogitOrg/neogit",
     lazy = false,
@@ -209,9 +213,22 @@ return {
       -- Only one of these is needed.
       "nvim-telescope/telescope.nvim", -- optional
       -- "ibhagwan/fzf-lua",              -- optional
-      "echasnovski/mini.pick", -- optional
+      -- "echasnovski/mini.pick", -- optional
       -- "folke/snacks.nvim",             -- optional
     },
+
+    config = function()
+      -- NOTE: need to re-apply these theme changes, otherwise they will disappear
+      dofile(vim.g.base46_cache .. "syntax")
+      dofile(vim.g.base46_cache .. "git")
+
+      require("neogit").setup {
+        disable_commit_confirmation = true,
+        integrations = {
+          diffview = true,
+        },
+      }
+    end,
   },
 
   ------------------------------------------------------------------
@@ -260,7 +277,7 @@ return {
       -- C-k: Toggle signature help (if signature.enabled = true)
       --
       -- See :h blink-cmp-config-keymap for defining your own keymap
-      keymap = { preset = "default" },
+      keymap = { preset = "enter" },
 
       appearance = {
         -- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
@@ -276,8 +293,8 @@ return {
           window = { border = "single" },
         },
         -- menu = require("nvchad.blink").menu,
-        scrollbar = false,
-        {
+        menu = {
+          scrollbar = true,
           border = "single",
           draw = {
             padding = { 1, 1 },
@@ -303,6 +320,7 @@ return {
 
       -- Default list of enabled providers defined so that you can extend it
       -- elsewhere in your config, without redefining it, due to `opts_extend`
+      -- TODO check if integration with autopairs is good
       sources = {
         default = { "lsp", "path", "snippets", "buffer", "crates" }, --  "lazydev", "supermaven" },
         providers = {
@@ -473,18 +491,18 @@ return {
       local set = vim.keymap.set
 
       -- Add or skip cursor above/below the main cursor.
-      set({ "n", "x" }, "<up>", function()
-        mc.lineAddCursor(-1)
-      end)
-      set({ "n", "x" }, "<down>", function()
-        mc.lineAddCursor(1)
-      end)
-      set({ "n", "x" }, "<leader><up>", function()
-        mc.lineSkipCursor(-1)
-      end)
-      set({ "n", "x" }, "<leader><down>", function()
-        mc.lineSkipCursor(1)
-      end)
+      -- set({ "n", "x" }, "<up>", function()
+      --   mc.lineAddCursor(-1)
+      -- end)
+      -- set({ "n", "x" }, "<down>", function()
+      --   mc.lineAddCursor(1)
+      -- end)
+      -- set({ "n", "x" }, "<leader><up>", function()
+      --   mc.lineSkipCursor(-1)
+      -- end)
+      -- set({ "n", "x" }, "<leader><down>", function()
+      --   mc.lineSkipCursor(1)
+      -- end)
 
       -- Add or skip adding a new cursor by matching word/selection
       set({ "n", "x" }, "m", function()
