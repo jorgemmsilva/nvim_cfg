@@ -337,6 +337,7 @@ return {
       --
       -- See the fuzzy documentation for more information
       fuzzy = { implementation = "prefer_rust_with_warning" },
+      -- cmdline = { enabled = false },
     },
     opts_extend = { "sources.default" },
   },
@@ -458,6 +459,21 @@ return {
       extensions_list = { "themes", "terms" },
       extensions = {},
     },
+    -- config = function()
+    --   require("telescope").setup {
+    --     pickers = {
+    --       find_files = {
+    --         find_command = { "rg", "--files", "--iglob", "!.git", "--hidden" },
+    --       },
+    --       grep_string = {
+    --         additional_args = { "--hidden" },
+    --       },
+    --       live_grep = {
+    --         additional_args = { "--hidden" },
+    --       },
+    --     },
+    --   }
+    -- end,
   },
 
   {
@@ -937,6 +953,8 @@ return {
           },
         },
       }
+      -- vim.g.rustaceanvim.tools.test_executor = "background"
+      -- vim.g.rustaceanvim.tools.enable_nextest = false
     end,
   },
 

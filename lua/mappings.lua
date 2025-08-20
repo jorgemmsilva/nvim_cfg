@@ -97,9 +97,25 @@ map("n", "N", "Nzzzv")
 map("x", "<leader-p>", "_dP")
 
 -- map a decent keys to telescope stuff
-map("n", "<C-e>", "<cmd>Telescope find_files<CR>", { noremap = true, silent = true, desc = "telescope find files" })
-map("n", "<C-f>", "<cmd>Telescope live_grep<CR>", { noremap = true, silent = true, desc = "telescope live grep" })
-map("n", "<leader>fr", "<cmd>Telescope oldfiles<CR>", { desc = "Recent Files" })
+-- map("n", "<C-e>", "<cmd>Telescope find_files<CR>", { noremap = true, silent = true, desc = "telescope find files" })
+-- map("n", "<C-f>", "<cmd>Telescope live_grep<CR>", { noremap = true, silent = true, desc = "telescope live grep" })
+map("n", "<C-e>", function()
+  require("telescope.builtin").find_files {
+    -- no_ignore = true, -- Include ignored files
+    -- hidden = true, -- Optionally include hidden files
+    find_command = { "rg", "--files", "--iglob", "!.git", "--hidden" },
+  }
+end, { noremap = true, silent = true, desc = "telescope find files" })
+
+map("n", "<C-f>", function()
+  require("telescope.builtin").live_grep {
+    additional_args = function()
+      return { "--hidden" }
+    end,
+  }
+end, { noremap = true, silent = true, desc = "telescope live grep" })
+
+map("n", "<C-->", "<cmd>Telescope oldfiles<CR>", { noremap = true, silent = true, desc = "Recent Files" })
 
 -- allow to move selected lines up/down
 map("v", "J", ":m '>+1<CR>gv=gv")
@@ -139,6 +155,7 @@ map("n", "<C-b>", ":NvimTreeToggle<CR>", { noremap = true, silent = true, desc =
 
 -- toggle line wrap
 map("n", "<leader>z", function()
+  ---@diagnostic disable-next-line: undefined-field
   vim.opt.wrap = not vim.opt.wrap:get()
 end, { desc = "Toggle line wrap" })
 
@@ -303,3 +320,6 @@ map("n", "gh", function()
 end, { desc = "open neogit" })
 
 map("n", "gf", "gF", { desc = "open file under cursor (uses line and column if present" })
+
+map("n", "<C-S-l>", "20zl", { desc = "scroll 20 chars to the right" })
+map("n", "<C-S-h>", "20zh", { desc = "scroll 20 chars to the left" })
