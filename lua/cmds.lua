@@ -9,5 +9,11 @@ vim.api.nvim_create_user_command("Vs", function()
   vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-o>", true, false, true), "n", false)
 end, {})
 
+-- open a horizontal split
+vim.api.nvim_create_user_command("Hs", function()
+  vim.cmd "split"
+  vim.cmd "wincmd k" -- Move to upper window
+end, {})
+
 -- swap the current window with the next one (same as Ctrl+W x)
 vim.cmd "command! Xs wincmd x"
