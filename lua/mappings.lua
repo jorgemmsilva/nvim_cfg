@@ -217,6 +217,19 @@ map({ "i", "!", "t", "c" }, "<C-p>", '<C-r>"', { desc = "Paste from clipboard in
 --keep the contents of the _ register when pasting over a selection
 map("x", "<leader-p>", "_dP")
 
+-- put the `file/path:x:y` of the current visual selection into the system clipboard
+map("v", "<leader>i", function()
+  local start_line = vim.fn.line "v" -- start of current visual selection
+  local end_line = vim.fn.line "." -- current cursor line
+  if start_line > end_line then
+    start_line, end_line = end_line, start_line
+  end
+  local filepath = vim.fn.expand "%"
+  local result = filepath .. ":" .. start_line .. ":" .. end_line
+  vim.fn.setreg("+", result)
+  print("Copied to clipboard: " .. result)
+end, { desc = "Get file:line:line range" })
+
 --------------------------------------------------------------------------------
 --                          Buffers
 --------------------------------------------------------------------------------
