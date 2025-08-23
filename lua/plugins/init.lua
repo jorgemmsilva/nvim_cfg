@@ -897,7 +897,7 @@ return {
       indent = { enabled = true, animate = { enabled = false } },
       input = { enabled = true },
       picker = { enabled = true },
-      -- notifier = { enabled = true },
+      notifier = { enabled = true },
       quickfile = { enabled = true },
       scope = { enabled = true },
       -- scroll = { enabled = true },
@@ -906,78 +906,94 @@ return {
     },
   },
 
-  {
-    "ThePrimeagen/harpoon",
-    branch = "harpoon2",
-    dependencies = { "nvim-lua/plenary.nvim" },
-    init = function()
-      local harpoon = require "harpoon"
-      harpoon:setup()
-      local conf = require("telescope.config").values
-      local function toggle_telescope(harpoon_files)
-        local file_paths = {}
-        for _, item in ipairs(harpoon_files.items) do
-          table.insert(file_paths, item.value)
-        end
-
-        local make_finder = function()
-          local paths = {}
-
-          for _, item in ipairs(harpoon_files.items) do
-            table.insert(paths, item.value)
-          end
-
-          return require("telescope.finders").new_table {
-            results = paths,
-          }
-        end
-
-        require("telescope.pickers")
-          .new({}, {
-            prompt_title = "Harpoon",
-            finder = require("telescope.finders").new_table {
-              results = file_paths,
-            },
-            previewer = conf.file_previewer {},
-            sorter = conf.generic_sorter {},
-            attach_mappings = function(prompt_buffer_number, map)
-              -- delete entries from the telescope list
-              map("i", "<C-d>", function()
-                local state = require "telescope.actions.state"
-                local selected_entry = state.get_selected_entry()
-                local current_picker = state.get_current_picker(prompt_buffer_number)
-
-                harpoon:list():remove(selected_entry)
-                current_picker:refresh(make_finder())
-              end)
-
-              return true
-            end,
-          })
-          :find()
-      end
-
-      -- add to the list
-      vim.keymap.set("n", "<leader>a", function()
-        harpoon:list():add()
-      end, { desc = "add file to harpoon" })
-      -- toggle harpoon menu
-      vim.keymap.set("n", "-", function()
-        toggle_telescope(harpoon:list())
-      end, { noremap = true, desc = "Open harpoon window" })
-    end,
-  },
+  -- {
+  --   "ThePrimeagen/harpoon",
+  --   branch = "harpoon2",
+  --   dependencies = { "nvim-lua/plenary.nvim" },
+  --   init = function()
+  --     local harpoon = require "harpoon"
+  --     harpoon:setup()
+  --     local conf = require("telescope.config").values
+  --     -- add to the list
+  --     vim.keymap.set("n", "<leader>a", function()
+  --       harpoon:list():add()
+  --     end, { desc = "add file to harpoon" })
+  --
+  --     vim.keymap.set("n", "=", function()
+  --       harpoon.ui:toggle_quick_menu(harpoon:list())
+  --     end)
+  --     -- toggle harpoon menu
+  --     vim.keymap.set("n", "-", function()
+  --       local make_finder = function()
+  --         local paths = {}
+  --         for _, item in ipairs(harpoon:list()) do
+  --           table.insert(paths, item.value)
+  --         end
+  --         return require("telescope.finders").new_table {
+  --           results = paths,
+  --         }
+  --       end
+  --
+  --       require("telescope.pickers")
+  --         .new({}, {
+  --           prompt_title = "Harpoon",
+  --           finder = make_finder(),
+  --           previewer = conf.file_previewer {},
+  --           sorter = conf.generic_sorter {},
+  --           attach_mappings = function(prompt_buffer_number, map)
+  --             -- delete entries from the telescope list
+  --             map("i", "<C-d>", function()
+  --               local state = require "telescope.actions.state"
+  --               local selected_entry = state.get_selected_entry()
+  --               local current_picker = state.get_current_picker(prompt_buffer_number)
+  --               harpoon:list():remove(selected_entry)
+  --               current_picker:refresh(make_finder())
+  --             end)
+  --
+  --             return true
+  --           end,
+  --         })
+  --         :find()
+  --     end, { noremap = true, desc = "Open harpoon window" })
+  --   end,
+  -- },
 
   {
-    "MeanderingProgrammer/render-markdown.nvim",
-    lazy = false,
-    dependencies = { "nvim-treesitter/nvim-treesitter", "echasnovski/mini.nvim" }, -- if you use the mini.nvim suite
-    -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.icons' }, -- if you use standalone mini plugins
-    -- dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" }, -- if you prefer nvim-web-devicons
-    ---@module 'render-markdown'
-    ---@type render.md.UserConfig
-    opts = {},
+    "dmtrKovalenko/fff.nvim",
+    build = "cargo build --release",
+    opts = {
+      layout = {
+        prompt_position = "top",
+      },
+    },
+    keys = {
+      {
+        "<C-->",
+        function()
+          require("fff").find_files() -- or find_in_git_root() if you only want git files
+        end,
+        desc = "Open file picker",
+      },
+      {
+        "-",
+        function()
+          require("fff").find_in_git_root()
+        end,
+        desc = "Open file picker",
+      },
+    },
   },
+
+  -- {
+  --   "MeanderingProgrammer/render-markdown.nvim",
+  --   lazy = false,
+  --   dependencies = { "nvim-treesitter/nvim-treesitter", "echasnovski/mini.nvim" }, -- if you use the mini.nvim suite
+  --   -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.icons' }, -- if you use standalone mini plugins
+  --   -- dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" }, -- if you prefer nvim-web-devicons
+  --   ---@module 'render-markdown'
+  --   ---@type render.md.UserConfig
+  --   opts = {},
+  -- },
 
   ------------------------------------------------------------------
   --- RUST
