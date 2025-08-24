@@ -229,7 +229,7 @@ return {
 
         -- Actions
         map("n", "<leader>hs", gitsigns.stage_hunk, { desc = "Git: Stage Hunk" })
-        map("n", "<leader>hr", gitsigns.reset_hunk, { desc = "Git: Reset Hunk" })
+        map("n", "<leader>hr", gitsigns.reset_hunk, { desc = "Git: Revert Hunk" })
 
         map("v", "<leader>hs", function()
           gitsigns.stage_hunk { vim.fn.line ".", vim.fn.line "v" }
@@ -240,7 +240,7 @@ return {
         end, { desc = "Git: Reset Hunk" })
 
         map("n", "<leader>hS", gitsigns.stage_buffer, { desc = "Git: Stage Buffer" })
-        map("n", "<leader>hR", gitsigns.reset_buffer, { desc = "Git: Reset Buffer" })
+        map("n", "<leader>hR", gitsigns.reset_buffer, { desc = "Git: Revert Buffer" })
         map("n", "<leader>hp", gitsigns.preview_hunk, { desc = "Git: Preview Hunk" })
         map("n", "<leader>hi", gitsigns.preview_hunk_inline, { desc = "Git: Preview Hunk Inline" })
 
@@ -1163,7 +1163,7 @@ return {
     config = true,
     opts = {
       terminal = {
-        provider = "native",
+        provider = "snacks",
       },
     },
     keys = {

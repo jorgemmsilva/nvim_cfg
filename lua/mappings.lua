@@ -256,12 +256,11 @@ map("n", "<C-PageUp>", ":bprevious<CR>", { noremap = true, silent = true, desc =
 
 -- toggle terminal
 map({ "n", "t", "i" }, "<C-`>", function()
-  -- require("nvchad.term").toggle { pos = "sp", id = "htoggleTerm" }
   local current_buf = vim.api.nvim_get_current_buf()
   local current_buf_name = vim.api.nvim_buf_get_name(current_buf)
 
   -- If we're currently in a terminal, go back to previous buffer
-  if current_buf_name:match "^term://" then
+  if current_buf_name:match "^term://" and not current_buf_name:match "claude" then
     vim.cmd "buffer #"
     return
   end
@@ -270,10 +269,9 @@ map({ "n", "t", "i" }, "<C-`>", function()
   for _, buf in ipairs(vim.api.nvim_list_bufs()) do
     if vim.api.nvim_buf_is_valid(buf) then
       local buf_name = vim.api.nvim_buf_get_name(buf)
-      if buf_name:match "^term://" then
-        -- Found terminal buffer, switch to it
+      if buf_name:match "^term://" and not buf_name:match "claude" then
         vim.cmd("buffer " .. buf)
-        -- vim.cmd "startinsert"
+        vim.cmd "startinsert"
         return
       end
     end
