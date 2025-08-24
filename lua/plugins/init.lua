@@ -209,7 +209,7 @@ return {
         end
 
         -- Navigation
-        map("n", "]c", function()
+        map("n", "]", function()
           if vim.wo.diff then
             vim.cmd.normal { "]c", bang = true }
           else
@@ -218,7 +218,7 @@ return {
           end
         end)
 
-        map("n", "[c", function()
+        map("n", "[", function()
           if vim.wo.diff then
             vim.cmd.normal { "[c", bang = true }
           else
@@ -277,10 +277,10 @@ return {
       "sindrets/diffview.nvim", -- optional - Diff integration
 
       -- Only one of these is needed.
-      "nvim-telescope/telescope.nvim", -- optional
+      -- "nvim-telescope/telescope.nvim", -- optional
       -- "ibhagwan/fzf-lua",              -- optional
       -- "echasnovski/mini.pick", -- optional
-      -- "folke/snacks.nvim",             -- optional
+      "folke/snacks.nvim", -- optional
     },
 
     config = function()
@@ -292,6 +292,7 @@ return {
         disable_commit_confirmation = true,
         integrations = {
           diffview = true,
+          snacks = true,
         },
       }
     end,
@@ -388,12 +389,16 @@ return {
       -- elsewhere in your config, without redefining it, due to `opts_extend`
       -- TODO check if integration with autopairs is good
       sources = {
-        default = { "lsp", "path", "snippets", "buffer", "crates" }, --  "lazydev", "supermaven" },
+        default = { "lsp", "path", "snippets", "buffer", "crates" },
         providers = {
           crates = {
             name = "crates",
             module = "blink.compat.source",
           },
+          -- magenta = {
+          --   name = "magenta",
+          --   module = "blink.compat.source",
+          -- },
         },
       },
 
@@ -407,75 +412,6 @@ return {
     },
     opts_extend = { "sources.default" },
   },
-
-  -- {
-  --   "hrsh7th/nvim-cmp",
-  --   event = "InsertEnter",
-  --   dependencies = {
-  --     -- {
-  --     --   -- snippet plugin
-  --     --   "L3MON4D3/LuaSnip",
-  --     --   dependencies = "rafamadriz/friendly-snippets",
-  --     --   opts = { history = true, updateevents = "TextChanged,TextChangedI" },
-  --     --   config = function(_, opts)
-  --     --     require("luasnip").config.set_config(opts)
-  --     --     require "nvchad.configs.luasnip"
-  --     --   end,
-  --     -- },
-  --
-  --     -- autopairing of (){}[] etc
-  --     -- {
-  --     --   "windwp/nvim-autopairs",
-  --     --   opts = {
-  --     --     fast_wrap = {},
-  --     --     disable_filetype = { "TelescopePrompt", "vim" },
-  --     --   },
-  --     --   config = function(_, opts)
-  --     --     require("nvim-autopairs").setup(opts)
-  --     --
-  --     --     -- setup cmp for autopairs
-  --     --     local cmp_autopairs = require "nvim-autopairs.completion.cmp"
-  --     --     require("cmp").event:on("confirm_done", cmp_autopairs.on_confirm_done())
-  --     --   end,
-  --     -- },
-  --
-  --     -- cmp sources plugins
-  --     {
-  --       -- "saadparwaiz1/cmp_luasnip",
-  --       "hrsh7th/cmp-nvim-lua",
-  --       "hrsh7th/cmp-nvim-lsp",
-  --       "hrsh7th/cmp-buffer",
-  --       "https://codeberg.org/FelipeLema/cmp-async-path.git",
-  --       -- "saecki/crates.nvim",
-  --     },
-  --   },
-
-  --   opts = function()
-  --     local opts = require "nvchad.configs.cmp"
-  --
-  --     local cmp = require "cmp"
-  --     opts.mapping = vim.tbl_extend("force", opts.mapping or {}, {
-  --       ["<Down>"] = cmp.mapping.select_next_item { behavior = cmp.SelectBehavior.Select },
-  --       ["<Up>"] = cmp.mapping.select_prev_item { behavior = cmp.SelectBehavior.Select },
-  --     })
-  --
-  --     opts.mapping["<Tab>"] = vim.NIL
-  --     opts.mapping["<S-Tab>"] = vim.NIL
-  --
-  --     table.insert(opts.sources, { name = "lazydev", group_index = 0 })
-  --     table.insert(opts.sources, { name = "crates" })
-  --     -- table.insert(opts.sources, { name = "supermaven" })
-  --     opts.sorting = {
-  --       comparators = {
-  --         cmp.config.compare.exact,
-  --         cmp.config.compare.offset,
-  --         cmp.config.compare.recently_used,
-  --       },
-  --     }
-  --
-  --     return opts
-  --   end,
-  -- },
 
   {
     "supermaven-inc/supermaven-nvim",
@@ -494,6 +430,32 @@ return {
       }
     end,
   },
+
+  -- {
+  --   "dlants/magenta.nvim",
+  --   lazy = false, -- you could also bind to <leader>mt
+  --   build = "npm install --frozen-lockfile",
+  --   opts = {
+  --     profiles = {
+  --       {
+  --         name = "claude",
+  --         provider = "anthropic",
+  --         model = "claude-4-sonnet-20250514",
+  --
+  --         fastModel = "claude-3-5-haiku-20241022", -- optional, defaults provided
+  --         -- apiKeyEnvVar = "ANTHROPIC_API_KEY",
+  --         authType = "max",
+  --         thinking = {
+  --           enabled = true,
+  --           -- budgetTokens = 1024, -- optional, defaults to 1024, must be >= 1024
+  --         },
+  --       },
+  --     },
+  --     sidebarPosition = "right",
+  --     picker = "snacks",
+  --     defaultKeymaps = true,
+  --   },
+  -- },
 
   ------------------------------------------------------------------
   --- MISC
@@ -965,6 +927,9 @@ return {
       layout = {
         prompt_position = "top",
       },
+      frecency = {
+        enabled = true,
+      },
     },
     keys = {
       {
@@ -1189,4 +1154,34 @@ return {
   --     },
   --   },
   -- },
+
+  {
+    "coder/claudecode.nvim",
+    dependencies = { "folke/snacks.nvim" },
+    opts = {
+      terminal_cmd = "/Users/jorge/.config/nvim/claude-sandbox-nvim",
+      terminal = {
+        provider = "native",
+      },
+    },
+    keys = {
+      { "<leader>a", nil, desc = "AI/Claude Code" },
+      { "<leader>ac", "<cmd>ClaudeCode<cr>", desc = "Toggle Claude" },
+      { "<leader>af", "<cmd>ClaudeCodeFocus<cr>", desc = "Focus Claude" },
+      { "<leader>ar", "<cmd>ClaudeCode --resume<cr>", desc = "Resume Claude" },
+      { "<leader>aC", "<cmd>ClaudeCode --continue<cr>", desc = "Continue Claude" },
+      { "<leader>am", "<cmd>ClaudeCodeSelectModel<cr>", desc = "Select Claude model" },
+      { "<leader>ab", "<cmd>ClaudeCodeAdd %<cr>", desc = "Add current buffer" },
+      { "<leader>as", "<cmd>ClaudeCodeSend<cr>", mode = "v", desc = "Send to Claude" },
+      {
+        "<leader>as",
+        "<cmd>ClaudeCodeTreeAdd<cr>",
+        desc = "Add file",
+        ft = { "NvimTree", "neo-tree", "oil", "minifiles" },
+      },
+      -- Diff management
+      { "<leader>aa", "<cmd>ClaudeCodeDiffAccept<cr>", desc = "Accept diff" },
+      { "<leader>ad", "<cmd>ClaudeCodeDiffDeny<cr>", desc = "Deny diff" },
+    },
+  },
 }
