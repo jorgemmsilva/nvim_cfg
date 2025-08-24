@@ -460,6 +460,7 @@ return {
   ------------------------------------------------------------------
   --- MISC
   ------------------------------------------------------------------
+
   -- { "karb94/neoscroll.nvim" },
   {
     "nvim-telescope/telescope.nvim",
@@ -1015,6 +1016,7 @@ return {
     },
     config = function()
       require("neotest").setup {
+        ---@diagnostic disable-next-line: missing-fields
         adapters = {
           require "rustaceanvim.neotest",
         },
@@ -1158,8 +1160,8 @@ return {
   {
     "coder/claudecode.nvim",
     dependencies = { "folke/snacks.nvim" },
+    config = true,
     opts = {
-      terminal_cmd = "/Users/jorge/.config/nvim/claude-sandbox-nvim",
       terminal = {
         provider = "native",
       },
