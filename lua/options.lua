@@ -64,3 +64,7 @@ vim.g.loaded_ruby_provider = 0
 -- local sep = is_windows and "\\" or "/"
 -- local delim = is_windows and ";" or ":"
 -- vim.env.PATH = table.concat({ vim.fn.stdpath "data", "mason", "bin" }, sep) .. delim .. vim.env.PATH
+
+vim.opt.title = true
+vim.opt.titlelen = 0 -- do not shorten
+vim.opt.titlestring = 'nvim %{expand("%:p")}'
