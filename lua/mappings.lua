@@ -124,7 +124,7 @@ end, { silent = true, buffer = bufnr })
 --------------------------------------------------------------------------------
 
 -- telescope lsp integration
-map("n", "gr", require("telescope.builtin").lsp_references, { noremap = true, desc = "[G]oto [R]eferences" })
+-- map("n", "gr", require("telescope.builtin").lsp_references, { noremap = true, desc = "[G]oto [R]eferences" })
 map("n", "gi", require("telescope.builtin").lsp_implementations, { noremap = true, desc = "[G]oto [I]mplementation" })
 map("n", "gd", require("telescope.builtin").lsp_definitions, { noremap = true, desc = "[G]oto [D]efinition" })
 map("n", "go", require("telescope.builtin").lsp_document_symbols, { desc = "Open Document Symbols" })
@@ -232,7 +232,14 @@ end, { desc = "Get file:line:line range" })
 --                          Buffers
 --------------------------------------------------------------------------------
 map("n", "<leader>b", "<cmd>enew<CR>", { desc = "buffer new" })
-map("n", "<leader><S-x>", "<cmd>%bd|e#<CR>", { desc = "close all buffers except the current one" })
+map("n", "<leader><S-x>", function()
+  local current = vim.api.nvim_get_current_buf()
+  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+    if buf ~= current and vim.api.nvim_buf_is_loaded(buf) and vim.bo[buf].buftype ~= "terminal" then
+      vim.api.nvim_buf_delete(buf, { force = false })
+    end
+  end
+end, { desc = "close all buffers except the current one" })
 
 map("n", "<tab>", function()
   require("nvchad.tabufline").next()
@@ -294,7 +301,7 @@ map("n", "<leader>u", "<cmd>UndotreeToggle<CR>")
 map({ "n", "i" }, "<C-s>", "<Esc>:w<CR>", { desc = "save file" })
 map({ "n", "i" }, "<C-S-s>", "<Esc>:wa<CR>", { desc = "Save all buffers" })
 
-map("n", "<C-c>", "<cmd>%y+<CR>", { desc = "general copy whole file" })
+-- map("n", "<C-c>", "<cmd>%y+<CR>", { desc = "general copy whole file" })
 
 map({ "n", "x" }, "<leader>fm", function()
   require("conform").format { lsp_fallback = true }
