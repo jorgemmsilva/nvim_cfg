@@ -4,13 +4,11 @@ return {
     "NvChad/NvChad",
     lazy = false,
     branch = "v2.5",
-    -- import = "nvchad.plugins",
   },
 
   ------------------------------------------------------------------
   --- NVChad
   ------------------------------------------------------------------
-  { "nvim-lua/plenary.nvim" },
 
   {
     "nvchad/base46",
@@ -38,22 +36,6 @@ return {
       return { override = require "nvchad.icons.devicons" }
     end,
   },
-
-  -- {
-  --   "lukas-reineke/indent-blankline.nvim",
-  --   event = "User FilePost",
-  --   opts = {
-  --     indent = { char = "│", highlight = "IblChar" },
-  --     scope = { char = "│", highlight = "IblScopeChar" },
-  --   },
-  --   config = function(_, opts)
-  --     dofile(vim.g.base46_cache .. "blankline")
-  --
-  --     local hooks = require "ibl.hooks"
-  --     hooks.register(hooks.type.WHITESPACE, hooks.builtin.hide_first_space_indent_level)
-  --     require("ibl").setup(opts)
-  --   end,
-  -- },
 
   -- file managing , picker etc
   {
@@ -416,52 +398,23 @@ return {
   {
     "supermaven-inc/supermaven-nvim",
     lazy = false,
-    config = function()
-      require("supermaven-nvim").setup {
-        keymaps = {
-          accept_suggestion = "<Tab>",
-          -- clear_suggestion = "<C-S-h>",
-          -- accept_word = "<S-l>",
-        },
-        color = {
-          suggestion_color = "#7a7e85",
-          cterm = 244,
-        },
-      }
-    end,
+    opts = {
+      keymaps = {
+        accept_suggestion = "<Tab>",
+        -- clear_suggestion = "<C-S-h>",
+        -- accept_word = "<S-l>",
+      },
+      color = {
+        suggestion_color = "#7a7e85",
+        cterm = 244,
+      },
+    },
   },
-
-  -- {
-  --   "dlants/magenta.nvim",
-  --   lazy = false, -- you could also bind to <leader>mt
-  --   build = "npm install --frozen-lockfile",
-  --   opts = {
-  --     profiles = {
-  --       {
-  --         name = "claude",
-  --         provider = "anthropic",
-  --         model = "claude-4-sonnet-20250514",
-  --
-  --         fastModel = "claude-3-5-haiku-20241022", -- optional, defaults provided
-  --         -- apiKeyEnvVar = "ANTHROPIC_API_KEY",
-  --         authType = "max",
-  --         thinking = {
-  --           enabled = true,
-  --           -- budgetTokens = 1024, -- optional, defaults to 1024, must be >= 1024
-  --         },
-  --       },
-  --     },
-  --     sidebarPosition = "right",
-  --     picker = "snacks",
-  --     defaultKeymaps = true,
-  --   },
-  -- },
 
   ------------------------------------------------------------------
   --- MISC
   ------------------------------------------------------------------
 
-  -- { "karb94/neoscroll.nvim" },
   {
     "nvim-telescope/telescope.nvim",
     dependencies = { "nvim-treesitter/nvim-treesitter" },
@@ -488,21 +441,6 @@ return {
       extensions_list = { "themes", "terms" },
       extensions = {},
     },
-    -- config = function()
-    --   require("telescope").setup {
-    --     pickers = {
-    --       find_files = {
-    --         find_command = { "rg", "--files", "--iglob", "!.git", "--hidden" },
-    --       },
-    --       grep_string = {
-    --         additional_args = { "--hidden" },
-    --       },
-    --       live_grep = {
-    --         additional_args = { "--hidden" },
-    --       },
-    --     },
-    --   }
-    -- end,
   },
 
   {
@@ -639,59 +577,13 @@ return {
   {
     "rmagatti/auto-session",
     lazy = false,
-    ---enables autocomplete for opts
     ---@module "auto-session"
-    -- ---@type AutoSession.Config
+    ---@type AutoSession.Config
     opts = {
       suppressed_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
       -- log_level = 'debug',
     },
   },
-
-  -- {
-  --   "petertriho/nvim-scrollbar",
-  --   lazy = false,
-  --   config = function()
-  --     require("scrollbar").setup {
-  --       -- TODO git colors are not correct
-  --       handle = {
-  --         color = "White",
-  --       },
-  --       marks = {
-  --         Search = { color = "#ff6600" },
-  --         Error = { color = "DiagnosticError" },
-  --         Warn = { color = "DiagnosticWarn" },
-  --         Info = { color = "DiagnosticInfo" },
-  --         Hint = { color = "DiagnosticHint" },
-  --         Misc = { color = "Identifier" },
-  --         GitAdd = { color = "green" },
-  --         GitChange = { color = "orange" },
-  --         GitDelete = { color = "red" },
-  --       },
-  --     }
-  --     require("scrollbar.handlers.search").setup {
-  --       -- hlslens config overrides
-  --       override_lens = function() end,
-  --     }
-  --     require("gitsigns").setup()
-  --     require("scrollbar.handlers.gitsigns").setup()
-  --   end,
-  -- },
-
-  -- {
-  --   "kevinhwang91/nvim-hlslens",
-  -- },
-  -- {
-  --   "levouh/tint.nvim",
-  --   event = "VeryLazy",
-  --   opts = {
-  --     tint = 0, -- Negative values darken inactive windows
-  --     saturation = 0.3, -- Slight desaturation
-  --   },
-  --   keys = {
-  --     { "<leader>ti", "<cmd>TintToggle<cr>", desc = "Toggle window tinting" },
-  --   },
-  -- },
 
   {
     "leath-dub/snipe.nvim",
@@ -823,7 +715,7 @@ return {
       vim.g.qs_highlight_on_keys = { "f", "F", "t", "T" }
     end,
   },
-  --
+
   -- {
   --   "MagicDuck/grug-far.nvim",
   --   -- Note (lazy loading): grug-far.lua defers all it's requires so it's lazy by default
@@ -848,17 +740,6 @@ return {
     lazy = false,
     init = function()
       require("oil").setup()
-    end,
-  },
-
-  {
-    "kylechui/nvim-surround",
-    version = "^3.0.0", -- Use for stability; omit to use `main` branch for the latest features
-    event = "VeryLazy",
-    config = function()
-      require("nvim-surround").setup {
-        -- Configuration here, or leave empty to use defaults
-      }
     end,
   },
 
@@ -982,6 +863,10 @@ return {
       },
     },
   },
+
+  ------------------------------------------------------------------
+  --- MARKDOWN
+  ------------------------------------------------------------------
 
   -- {
   --   "MeanderingProgrammer/render-markdown.nvim",
@@ -1146,84 +1031,6 @@ return {
   ------------------------------------------------------------------
   --- AI
   ------------------------------------------------------------------
-  -- {
-  --   "yetone/avante.nvim",
-  --   -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
-  --   -- ⚠️ must add this setting! ! !
-  --   build = vim.fn.has "win32" ~= 0 and "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false"
-  --     or "make",
-  --   event = "VeryLazy",
-  --   version = false, -- Never set this value to "*"! Never!
-  --   ---@module 'avante'
-  --   ---@type avante.Config
-  --   opts = {
-  --     -- add any opts here
-  --     -- for example
-  --     provider = "ollama",
-  --     providers = {
-  --       -- claude = {
-  --       --   endpoint = "https://api.anthropic.com",
-  --       --   model = "claude-sonnet-4-20250514",
-  --       --   timeout = 30000, -- Timeout in milliseconds
-  --       --   extra_request_body = {
-  --       --     temperature = 0.75,
-  --       --     max_tokens = 20480,
-  --       --   },
-  --       -- },
-  --       -- moonshot = {
-  --       --   endpoint = "https://api.moonshot.ai/v1",
-  --       --   model = "kimi-k2-0711-preview",
-  --       --   timeout = 30000, -- Timeout in milliseconds
-  --       --   extra_request_body = {
-  --       --     temperature = 0.75,
-  --       --     max_tokens = 32768,
-  --       --   },
-  --       -- },
-  --       ollama = {
-  --         endpoint = "http://localhost:11434",
-  --         model = "qwen3-coder:latest",
-  --       },
-  --     },
-  --   },
-  --   dependencies = {
-  --     "nvim-lua/plenary.nvim",
-  --     "MunifTanjim/nui.nvim",
-  --     --- The below dependencies are optional,
-  --     "echasnovski/mini.pick", -- for file_selector provider mini.pick
-  --     "nvim-telescope/telescope.nvim", -- for file_selector provider telescope
-  --     "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
-  --     "ibhagwan/fzf-lua", -- for file_selector provider fzf
-  --     "stevearc/dressing.nvim", -- for input provider dressing
-  --     "folke/snacks.nvim", -- for input provider snacks
-  --     "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
-  --     "zbirenbaum/copilot.lua", -- for providers='copilot'
-  --     {
-  --       -- support for image pasting
-  --       "HakonHarnes/img-clip.nvim",
-  --       event = "VeryLazy",
-  --       opts = {
-  --         -- recommended settings
-  --         default = {
-  --           embed_image_as_base64 = false,
-  --           prompt_for_file_name = false,
-  --           drag_and_drop = {
-  --             insert_mode = true,
-  --           },
-  --           -- required for Windows users
-  --           use_absolute_path = true,
-  --         },
-  --       },
-  --     },
-  --     {
-  --       -- Make sure to set this up properly if you have lazy=true
-  --       "MeanderingProgrammer/render-markdown.nvim",
-  --       opts = {
-  --         file_types = { "markdown", "Avante" },
-  --       },
-  --       ft = { "markdown", "Avante" },
-  --     },
-  --   },
-  -- },
 
   {
     "coder/claudecode.nvim",

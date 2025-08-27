@@ -285,6 +285,8 @@ map({ "n", "t", "i" }, "<C-`>", function()
       if buf_name:match "^term://" and not buf_name:match "claude" then
         vim.cmd("buffer " .. buf)
         vim.cmd "startinsert"
+        vim.opt.number = true
+        vim.opt.relativenumber = true
         return
       end
     end
