@@ -46,8 +46,8 @@ map("n", "n", "nzzzv")
 map("n", "N", "Nzzzv")
 
 -- navigate "quick-fix list"
-map("n", "<leader>j", "<cmd>cnext<CR>zz", { desc = "Quick-fix list next" })
-map("n", "<leader>k", "<cmd>cprev<CR>zz", { desc = "Quick-fix list prev" })
+-- map("n", "<leader>j", "<cmd>cnext<CR>zz", { desc = "Quick-fix list next" })
+-- map("n", "<leader>k", "<cmd>cprev<CR>zz", { desc = "Quick-fix list prev" })
 map("n", "<F4>", "<cmd>cnext<CR>zz", { desc = "Quick-fix list next" })
 map("n", "<S-F4>", "<cmd>cprev<CR>zz", { desc = "Quick-fix list next" })
 map("n", "<F16>", "<cmd>cprev<CR>zz", { desc = "Quick-fix list prev" }) -- workaround for S-F4 not working in rio terminal
@@ -234,10 +234,16 @@ end, { desc = "Get file:line:line range" })
 map("n", "<leader>b", "<cmd>enew<CR>", { desc = "buffer new" })
 map("n", "<leader><S-x>", function()
   local current = vim.api.nvim_get_current_buf()
+  local buffers_to_delete = {}
+
   for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-    if buf ~= current and vim.api.nvim_buf_is_loaded(buf) and vim.bo[buf].buftype ~= "terminal" then
-      vim.api.nvim_buf_delete(buf, { force = false })
+    if buf ~= current and vim.bo[buf].buftype ~= "terminal" then
+      table.insert(buffers_to_delete, buf)
     end
+  end
+
+  for _, buf in ipairs(buffers_to_delete) do
+    vim.api.nvim_buf_delete(buf, { force = false })
   end
 end, { desc = "close all buffers except the current one" })
 

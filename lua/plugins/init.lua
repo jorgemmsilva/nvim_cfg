@@ -39,21 +39,21 @@ return {
     end,
   },
 
-  {
-    "lukas-reineke/indent-blankline.nvim",
-    event = "User FilePost",
-    opts = {
-      indent = { char = "│", highlight = "IblChar" },
-      scope = { char = "│", highlight = "IblScopeChar" },
-    },
-    config = function(_, opts)
-      dofile(vim.g.base46_cache .. "blankline")
-
-      local hooks = require "ibl.hooks"
-      hooks.register(hooks.type.WHITESPACE, hooks.builtin.hide_first_space_indent_level)
-      require("ibl").setup(opts)
-    end,
-  },
+  -- {
+  --   "lukas-reineke/indent-blankline.nvim",
+  --   event = "User FilePost",
+  --   opts = {
+  --     indent = { char = "│", highlight = "IblChar" },
+  --     scope = { char = "│", highlight = "IblScopeChar" },
+  --   },
+  --   config = function(_, opts)
+  --     dofile(vim.g.base46_cache .. "blankline")
+  --
+  --     local hooks = require "ibl.hooks"
+  --     hooks.register(hooks.type.WHITESPACE, hooks.builtin.hide_first_space_indent_level)
+  --     require("ibl").setup(opts)
+  --   end,
+  -- },
 
   -- file managing , picker etc
   {
@@ -786,6 +786,22 @@ return {
         "<cmd>Trouble todo filter = {tag = {TODO,FIX,FIXME}}<cr>",
         desc = "TODO List (Trouble)",
       },
+      {
+        "<leader>j",
+        function()
+          ---@diagnostic disable-next-line: missing-parameter, missing-fields
+          require("trouble").next { skip_groups = true, jump = true }
+        end,
+        desc = "Jump to next location",
+      },
+      {
+        "<leader>k",
+        function()
+          ---@diagnostic disable-next-line: missing-parameter, missing-fields
+          require("trouble").prev { skip_groups = true, jump = true }
+        end,
+        desc = "Jump to previous location",
+      },
     },
   },
 
@@ -869,6 +885,22 @@ return {
     },
   },
 
+  {
+    "folke/noice.nvim",
+    event = "VeryLazy",
+    opts = {
+      -- add any options here
+    },
+    dependencies = {
+      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+      "MunifTanjim/nui.nvim",
+      -- OPTIONAL:
+      --   `nvim-notify` is only needed, if you want to use the notification view.
+      --   If not available, we use `mini` as the fallback
+      "rcarriga/nvim-notify",
+    },
+  },
+
   -- {
   --   "ThePrimeagen/harpoon",
   --   branch = "harpoon2",
@@ -924,6 +956,7 @@ return {
   {
     "dmtrKovalenko/fff.nvim",
     build = "cargo build --release",
+    lazy = false,
     opts = {
       layout = {
         prompt_position = "top",
@@ -979,6 +1012,43 @@ return {
           hover_actions = {
             auto_focus = false,
           },
+          enable_nextest = false,
+          -- test_executor = "background"
+          -- test_executor = function(cmd:string, args:string[], cwd:string|nil, opts?: rustaceanvim.ExecutorOpts)
+          --   -- Add custom parameters like --show-output
+          --   local custom_args = vim.list_extend({}, args)
+          --   table.insert(custom_args, "--show-output")
+          --
+          --   -- Set up custom environment variables
+          --   local env = vim.tbl_extend("force", vim.fn.environ(), {
+          --     RUST_LOG = "debug",
+          --     RUST_BACKTRACE = "1",
+          --   })
+          --
+          --   -- Execute the command with custom args and env
+          --   vim.fn.jobstart({cmd, unpack(custom_args)}, {
+          --     cwd = cwd,
+          --     env = env,
+          --     on_stdout = function(_, data, _)
+          --       if data then
+          --         for _, line in ipairs(data) do
+          --           if line ~= "" then
+          --             print(line)
+          --           end
+          --         end
+          --       end
+          --     end,
+          --     on_stderr = function(_, data, _)
+          --       if data then
+          --         for _, line in ipairs(data) do
+          --           if line ~= "" then
+          --             vim.notify(line, vim.log.levels.ERROR)
+          --           end
+          --         end
+          --       end
+          --     end,
+          --   })
+          -- end
         },
         server = {
           -- on_attach = function(client, bufnr) end,
@@ -1001,8 +1071,6 @@ return {
           },
         },
       }
-      -- vim.g.rustaceanvim.tools.test_executor = "background"
-      -- vim.g.rustaceanvim.tools.enable_nextest = false
     end,
   },
 
@@ -1015,8 +1083,8 @@ return {
       "nvim-treesitter/nvim-treesitter",
     },
     config = function()
+      ---@diagnostic disable-next-line: missing-fields
       require("neotest").setup {
-        ---@diagnostic disable-next-line: missing-fields
         adapters = {
           require "rustaceanvim.neotest",
         },
