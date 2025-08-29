@@ -268,7 +268,7 @@ return {
     config = function()
       -- NOTE: need to re-apply these theme changes, otherwise they will disappear
       dofile(vim.g.base46_cache .. "syntax")
-      dofile(vim.g.base46_cache .. "git")
+      -- dofile(vim.g.base46_cache .. "git")
 
       require("neogit").setup {
         disable_commit_confirmation = true,

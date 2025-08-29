@@ -124,7 +124,7 @@ end, { silent = true, buffer = bufnr })
 --------------------------------------------------------------------------------
 
 -- telescope lsp integration
--- map("n", "gr", require("telescope.builtin").lsp_references, { noremap = true, desc = "[G]oto [R]eferences" })
+map("n", "gr", require("telescope.builtin").lsp_references, { noremap = true, desc = "[G]oto [R]eferences" })
 map("n", "gi", require("telescope.builtin").lsp_implementations, { noremap = true, desc = "[G]oto [I]mplementation" })
 map("n", "gd", require("telescope.builtin").lsp_definitions, { noremap = true, desc = "[G]oto [D]efinition" })
 map("n", "go", require("telescope.builtin").lsp_document_symbols, { desc = "Open Document Symbols" })
@@ -267,35 +267,53 @@ map("n", "<C-PageUp>", ":bprevious<CR>", { noremap = true, silent = true, desc =
 --                          Terminal
 --------------------------------------------------------------------------------
 
--- toggle terminal
-map({ "n", "t", "i" }, "<C-`>", function()
-  local current_buf = vim.api.nvim_get_current_buf()
-  local current_buf_name = vim.api.nvim_buf_get_name(current_buf)
+local floating_terminal = { win = -1, buf = -1 }
 
-  -- If we're currently in a terminal, go back to previous buffer
-  if current_buf_name:match "^term://" and not current_buf_name:match "claude" then
-    vim.cmd "buffer #"
-    return
+local function make_floating_terminal(opts)
+  opts = opts or {}
+  local width = opts.width or math.floor(vim.o.columns * 0.8)
+  local height = opts.height or math.floor(vim.o.lines * 0.8)
+  local row = opts.row or math.floor((vim.o.lines - height) / 2)
+  local col = opts.col or math.floor((vim.o.columns - width) / 2)
+
+  local buf = nil
+  local is_new_buf = false
+  if vim.api.nvim_buf_is_valid(opts.buf) then
+    buf = opts.buf
+  else
+    buf = vim.api.nvim_create_buf(false, true) -- No file, scratch buffer
+    is_new_buf = true
   end
+  local win = vim.api.nvim_open_win(buf, true, {
+    relative = "editor",
+    width = width,
+    height = height,
+    row = row,
+    col = col,
+    style = "minimal",
+    border = "rounded",
+  })
 
-  -- Look for existing terminal buffer
-  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-    if vim.api.nvim_buf_is_valid(buf) then
-      local buf_name = vim.api.nvim_buf_get_name(buf)
-      if buf_name:match "^term://" and not buf_name:match "claude" then
-        vim.cmd("buffer " .. buf)
-        vim.cmd "startinsert"
-        vim.opt.number = true
-        vim.opt.relativenumber = true
-        return
-      end
-    end
+  -- make it a custom terminal only if it's a new buffer
+  if is_new_buf then
+    vim.cmd.terminal()
   end
+  vim.cmd.startinsert()
+  vim.opt.number = true
+  vim.opt.relativenumber = true
 
-  -- No terminal found, create new one
-  vim.cmd "terminal"
-  vim.cmd "startinsert"
-end, { desc = "terminal toggle" })
+  return { win = win, buf = buf }
+end
+
+local function toggle_floating_terminal()
+  if not vim.api.nvim_win_is_valid(floating_terminal.win) then
+    floating_terminal = make_floating_terminal { buf = floating_terminal.buf }
+  else
+    vim.api.nvim_win_hide(floating_terminal.win)
+  end
+end
+
+map({ "n", "t", "i" }, "<C-`>", toggle_floating_terminal, { desc = "Toggle terminal" })
 
 -- map <Esc> to exit terminal mode
 map("t", "<Esc>", [[<C-\><C-n>]], { noremap = true })
